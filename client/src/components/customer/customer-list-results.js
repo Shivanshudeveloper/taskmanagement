@@ -81,19 +81,16 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Task
+                </TableCell>
+                <TableCell>
+                  Assigned to
                 </TableCell>
                 <TableCell>
                   Email
                 </TableCell>
                 <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Registration date
+                  Assigned on
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -110,6 +107,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                       onChange={(event) => handleSelectOne(event, customer.id)}
                       value="true"
                     />
+                  </TableCell>
+                  <TableCell>
+                    {customer.task}
                   </TableCell>
                   <TableCell>
                     <Box
@@ -134,12 +134,6 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {customer.email}
-                  </TableCell>
-                  <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
-                  <TableCell>
-                    {customer.phone}
                   </TableCell>
                   <TableCell>
                     {format(customer.createdAt, 'dd/MM/yyyy')}

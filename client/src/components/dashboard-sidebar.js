@@ -24,13 +24,8 @@ const items = [
   },
   {
     href: '/customers',
-    icon: (<UsersIcon fontSize="small" />),
-    title: 'Customers'
-  },
-  {
-    href: '/products',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Products'
+    icon: (<SelectorIcon fontSize="small" />),
+    title: 'Task'
   },
   {
     href: '/account',
@@ -42,21 +37,7 @@ const items = [
     icon: (<CogIcon fontSize="small" />),
     title: 'Settings'
   },
-  {
-    href: '/login',
-    icon: (<LockIcon fontSize="small" />),
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: (<XCircleIcon fontSize="small" />),
-    title: 'Error'
-  }
+ 
 ];
 
 export const DashboardSidebar = (props) => {
@@ -168,18 +149,7 @@ export const DashboardSidebar = (props) => {
             py: 3
           }}
         >
-          <Typography
-            color="neutral.100"
-            variant="subtitle2"
-          >
-            Need more features?
-          </Typography>
-          <Typography
-            color="neutral.500"
-            variant="body2"
-          >
-            Check out our Pro solution template.
-          </Typography>
+          
           <Box
             sx={{
               display: 'flex',
@@ -191,26 +161,8 @@ export const DashboardSidebar = (props) => {
               }
             }}
           >
-            <img
-              alt="Go to pro"
-              src="/static/images/sidebar_pro.png"
-            />
+        
           </Box>
-          <NextLink
-            href="https://material-kit-pro-react.devias.io/"
-            passHref
-          >
-            <Button
-              color="secondary"
-              component="a"
-              endIcon={(<OpenInNewIcon />)}
-              fullWidth
-              sx={{ mt: 2 }}
-              variant="contained"
-            >
-              Pro Live Preview
-            </Button>
-          </NextLink>
         </Box>
       </Box>
     </>
@@ -249,7 +201,7 @@ export const DashboardSidebar = (props) => {
       }}
       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
       variant="temporary"
-    >
+    >   
       {content}
     </Drawer>
   );

@@ -5,13 +5,50 @@ import {
   CardContent,
   TextField,
   InputAdornment,
-  SvgIcon, Typography
+  SvgIcon, Typography,
+  Tooltip,
 } from '@mui/material';
 import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
+import { useRef, useState } from "react";
+import { ContentSearchDialog } from "../dashboard/content-search-dialog";
+
+
+
+
+const ContentSearchButton = () => {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenSearchDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseSearchDialog = () => {
+    setOpenDialog(false);
+  };
+
+  return (
+    <>
+      <Tooltip title="Search">
+      <Button
+          color="primary"
+          variant="contained"
+          onClick={handleOpenSearchDialog}
+        >
+          Add Tasks
+        </Button>
+      </Tooltip>
+      <ContentSearchDialog
+        onClose={handleCloseSearchDialog}
+        open={openDialog}
+      />
+    </>
+  );
+};
 
 export const CustomerListToolbar = (props) => (
+  
   <Box {...props}>
     <Box
       sx={{
@@ -26,27 +63,12 @@ export const CustomerListToolbar = (props) => (
         sx={{ m: 1 }}
         variant="h4"
       >
-        Customers
+        Task
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<UploadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Import
-        </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Export
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-        >
-          Add Customers
-        </Button>
+       
+       
+      <ContentSearchButton />
       </Box>
     </Box>
     <Box sx={{ mt: 3 }}>
@@ -67,7 +89,7 @@ export const CustomerListToolbar = (props) => (
                   </InputAdornment>
                 )
               }}
-              placeholder="Search customer"
+              placeholder="Search Task"
               variant="outlined"
             />
           </Box>

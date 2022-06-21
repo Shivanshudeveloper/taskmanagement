@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 export const customers = [
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'West Virginia',
@@ -17,6 +18,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Bristow',
@@ -31,6 +33,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Georgia',
@@ -45,6 +48,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Ohio',
@@ -59,6 +63,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Texas',
@@ -73,6 +78,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'California',
@@ -87,6 +93,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'California',
@@ -101,6 +108,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Nevada',
@@ -115,6 +123,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Michigan',
@@ -129,6 +138,7 @@ export const customers = [
   },
   {
     id: uuid(),
+    task: 'task1',
     address: {
       country: 'USA',
       state: 'Utah',
