@@ -1,21 +1,22 @@
-import { useState } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { useState } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import PropTypes from "prop-types";
+import { format } from "date-fns";
 import {
   Avatar,
   Box,
   Card,
   Checkbox,
+  Chip,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { getInitials } from '../../utils/get-initials';
+  Typography,
+} from "@mui/material";
+import { getInitials } from "../../utils/get-initials";
 
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -65,7 +66,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
   return (
     <Card {...rest}>
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
+        <Box sx={{ minWidth: 500 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -74,24 +75,17 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     checked={selectedCustomerIds.length === customers.length}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      selectedCustomerIds.length > 0 &&
+                      selectedCustomerIds.length < customers.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>
-                  Task
-                </TableCell>
-                <TableCell>
-                  Assigned to
-                </TableCell>
-                <TableCell>
-                  Email
-                </TableCell>
-                <TableCell>
-                  Assigned on
-                </TableCell>
+                <TableCell>Task</TableCell>
+                <TableCell>Assigned to</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Assigned on</TableCell>
+                <TableCell>Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -108,35 +102,30 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell>
-                    {customer.task}
-                  </TableCell>
+                  <TableCell>{customer.task}</TableCell>
                   <TableCell>
                     <Box
                       sx={{
-                        alignItems: 'center',
-                        display: 'flex'
+                        alignItems: "center",
+                        display: "flex",
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
+                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
                         {getInitials(customer.name)}
                       </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
+                      <Typography color="textPrimary" variant="body1">
                         {customer.name}
                       </Typography>
                     </Box>
                   </TableCell>
+                  <TableCell>{customer.email}</TableCell>
+                  <TableCell>{format(customer.createdAt, "dd/MM/yyyy")}</TableCell>
                   <TableCell>
-                    {customer.email}
-                  </TableCell>
-                  <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {customer.status == "completed" ? (
+                      <Chip label={customer.status} color="success" />
+                    ) : (
+                      <Chip label={customer.status} color="error" />
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -158,5 +147,5 @@ export const CustomerListResults = ({ customers, ...rest }) => {
 };
 
 CustomerListResults.propTypes = {
-  customers: PropTypes.array.isRequired
+  customers: PropTypes.array.isRequired,
 };
