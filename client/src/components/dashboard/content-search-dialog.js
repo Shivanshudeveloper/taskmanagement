@@ -12,6 +12,17 @@ import {
   TextField,
   Typography,
   Grid,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Select,
+  FormLabel,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  Menu,
+  FormGroup,
+  Switch,
 } from "@mui/material";
 import { Search as SearchIcon } from "../../icons/search";
 
@@ -55,6 +66,9 @@ export const ContentSearchDialog = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const { onClose, open, ...other } = props;
+  const [user, setUser] = useState(null);
+  const [marks, setMarks] = useState(null);
+  const [repeat, setRepeat] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -84,19 +98,137 @@ export const ContentSearchDialog = (props) => {
       </Box>
       <DialogContent>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item sm={12}>
+          <Grid
+            container
+            spacing={3}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <Grid item xs={12} md={6}>
               <TextField fullWidth label="Enter task name" />
             </Grid>
-            <Grid item sm={12}>
+            {/* <Grid item sm={12}>
               <TextField fullWidth label="Enter email" />
             </Grid>
             <Grid item sm={12}>
               <TextField fullWidth label="Enter description" />
-            </Grid>
-            <Grid item sm={12}>
+            </Grid> */}
+            <Grid item xs={12} md={6}>
               <TextField fullWidth label="Enter task status" />
             </Grid>
+            <Grid item xs={12}>
+              <FormControl component="fieldset">
+                <FormGroup aria-label="position" row>
+                  <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                    <FormControlLabel
+                      textAlign="center"
+                      value="wnd"
+                      control={<Switch color="success" />}
+                      label="WND"
+                      labelPlacement="top"
+                    />
+                    <FormControlLabel
+                      value="notice"
+                      control={<Switch color="success" />}
+                      label="Notice"
+                      labelPlacement="top"
+                    />
+                    <FormControlLabel
+                      value="sms"
+                      control={<Switch color="success" />}
+                      label="SMS"
+                      labelPlacement="top"
+                    />
+                  </Stack>
+                </FormGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">User</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={user}
+                  label="User"
+                  fullWidth
+                  onChange={(e) => {
+                    setUser(e.target.value);
+                  }}
+                >
+                  <MenuItem value={10}>Public</MenuItem>
+                  <MenuItem value={20}>Admin</MenuItem>
+                  <MenuItem value={30}>Private</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Marks</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={marks}
+                  label="Marks"
+                  fullWidth
+                  onChange={(e) => {
+                    setMarks(e.target.value);
+                  }}
+                >
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={30}>30</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <TextField type="date" helperText="Start Date"></TextField>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <TextField type="date" helperText="End Date"></TextField>
+            </Grid>
+
+            <Grid item xs={12} md={4} textAlign="center">
+              <TextField center type="time" helperText="Time"></TextField>
+            </Grid>
+
+            <Grid item xs={12} textAlign="center" m={1}>
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">Priority</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel value="high" control={<Radio />} label="High" />
+                  <FormControlLabel value="medium" control={<Radio />} label="Medium" />
+                  <FormControlLabel value="low" control={<Radio />} label="Low" />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
+            <Grid item md={6} xs={12} m={1}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Repeat</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={repeat}
+                  label="Repeat"
+                  fullWidth
+                  onChange={(e) => {
+                    setRepeat(e.target.value);
+                  }}
+                >
+                  <MenuItem value="daily">Daily</MenuItem>
+                  <MenuItem value="weekly">Weekly</MenuItem>
+                  <MenuItem value="monthly">Monthly</MenuItem>
+                  <MenuItem value="3 months">3 Months</MenuItem>
+                  <MenuItem value="6 months">6 Months</MenuItem>
+                  <MenuItem value="yearly">Yearly</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
             <Grid item sm={12}>
               <Box textAlign="right">
                 <Button
