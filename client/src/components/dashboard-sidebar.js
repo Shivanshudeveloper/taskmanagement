@@ -18,12 +18,12 @@ import { NavItem } from "./nav-item";
 
 const items = [
   {
-    href: "/",
+    href: "/dashboard",
     icon: <ChartBarIcon fontSize="small" />,
     title: "Dashboard",
   },
   {
-    href: "/customers",
+    href: "/tasks",
     icon: <SelectorIcon fontSize="small" />,
     title: "Task",
   },

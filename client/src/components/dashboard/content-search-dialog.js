@@ -31,53 +31,77 @@ import PropTypes from "prop-types";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 
-const results = {
-  Platform: [
-    {
-      description:
-        "Provide your users with the content they need, exactly when they need it, by building a next-level site search experience using our AI-powered search API.",
-      title: "Level up your site search experience with our hosted API",
-      path: "Users / Api-usage",
-    },
-    {
-      description:
-        "Algolia is a search-as-a-service API that helps marketplaces build performant search experiences at scale while reducing engineering time.",
-      title: "Build performant marketplace search at scale",
-      path: "Users / Api-usage",
-    },
-  ],
-  Resources: [
-    {
-      description: "Algolia’s architecture is heavily redundant, hosting every application on …",
-      title: "Using NetInfo API to Improve Algolia’s JavaScript Client",
-      path: "Resources / Blog posts",
-    },
-    {
-      description:
-        "Algolia is a search-as-a-service API that helps marketplaces build performant search experiences at scale while reducing engineering time.",
-      title: "Build performance",
-      path: "Resources / UI libraries",
-    },
-  ],
-};
+import { API_SERVICE } from "src/config";
+import { useAuth } from "src/hooks/use-auth";
 
 export const ContentSearchDialog = (props) => {
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const { onClose, open, ...other } = props;
-  const [user, setUser] = useState(null);
-  const [marks, setMarks] = useState(null);
-  const [repeat, setRepeat] = useState(null);
+  const { onClose, open, selectedTask, setToggler, ...other } = props;
+  const { user } = useAuth();
+  // const [user, setUser] = useState(null);
+  // const [marks, setMarks] = useState(null);
+  // const [repeat, setRepeat] = useState(null);
+
+  console.log(selectedTask);
+
+  const [state, setState] = useState({
+    name: "",
+    description: "",
+    assignedTo: "",
+    fromDate: "",
+    targetDate: "",
+    points: "",
+  });
+
+  const editTask = async () => {
+    try {
+      const response = await fetch(`${API_SERVICE}/edit_task/${selectedTask._id}/${user?.id}`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...state }),
+      });
+      if (response.status === 200) {
+        onClose();
+        alert("Task edited");
+        setToggler();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const createTask = async () => {
+    try {
+      const response = await fetch(`${API_SERVICE}/add_task`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...state, userId: user?.id }),
+      });
+      if (response.status === 200) {
+        onClose();
+        alert("Task created");
+        setToggler();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.value });
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setShowResults(false);
-    setIsLoading(true);
-    // Do search here
-    await wait(1500);
-    setIsLoading(false);
-    setShowResults(true);
+    console.log("Hello");
+    createTask();
   };
 
   return (
@@ -97,22 +121,121 @@ export const ContentSearchDialog = (props) => {
         <IconButton color="inherit"></IconButton>
       </Box>
       <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <Grid
-            container
-            spacing={3}
-            style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-          >
-            <Grid item xs={12} md={6}>
-              <TextField fullWidth label="Enter task name" />
-            </Grid>
-            {/* <Grid item sm={12}>
-              <TextField fullWidth label="Enter email" />
-            </Grid>
-            <Grid item sm={12}>
-              <TextField fullWidth label="Enter description" />
-            </Grid> */}
-            <Grid item xs={12} md={6}>
+        <Grid
+          container
+          spacing={3}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Task Name"
+              name="name"
+              onChange={handleChange}
+              value={state.name}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              InputLabelProps={{
+                shrink: true,
+              }}
+              multiline={true}
+              rows={4}
+              fullWidth
+              label="Additional Info"
+              name="description"
+              onChange={handleChange}
+              value={state.description}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Assign To"
+              name="assignedTo"
+              onChange={handleChange}
+              value={state.assignedTo}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Points"
+              type="Number"
+              name="points"
+              onChange={handleChange}
+              value={state.points}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              type="date"
+              label="From Date"
+              name="fromDate"
+              onChange={handleChange}
+              value={state.fromDate}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              type="date"
+              label="Target Date"
+              name="targetDate"
+              onChange={handleChange}
+              value={state.targetDate}
+            />
+          </Grid>
+
+          <Grid item sm={12}>
+            <Box textAlign="right">
+              <Button
+                margin={2}
+                variant="contained"
+                color="error"
+                style={{ marginRight: "20px" }}
+                onClick={onClose}
+              >
+                Cancel
+              </Button>
+              <Button
+                margin={2}
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  if (selectedTask) {
+                    editTask();
+                  } else {
+                    createTask();
+                  }
+                }}
+              >
+                Submit
+              </Button>
+            </Box>
+          </Grid>
+
+          {/* <Grid item xs={12} md={6}>
               <TextField fullWidth label="Enter task status" />
             </Grid>
             <Grid item xs={12}>
@@ -186,11 +309,9 @@ export const ContentSearchDialog = (props) => {
             <Grid item xs={6} md={4}>
               <TextField type="date" helperText="End Date"></TextField>
             </Grid>
-
             <Grid item xs={12} md={4} textAlign="center">
               <TextField center type="time" helperText="Time"></TextField>
             </Grid>
-
             <Grid item xs={12} textAlign="center" m={1}>
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">Priority</FormLabel>
@@ -205,7 +326,6 @@ export const ContentSearchDialog = (props) => {
                 </RadioGroup>
               </FormControl>
             </Grid>
-
             <Grid item md={6} xs={12} m={1}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Repeat</InputLabel>
@@ -228,7 +348,6 @@ export const ContentSearchDialog = (props) => {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={12}>
               <Box textAlign="right">
                 <Button
@@ -244,10 +363,10 @@ export const ContentSearchDialog = (props) => {
                   Submit
                 </Button>
               </Box>
-            </Grid>
-          </Grid>
-        </form>
-        {isLoading && (
+            </Grid>{" "} */}
+        </Grid>
+
+        {/* {isLoading && (
           <Box
             sx={{
               display: "flex",
@@ -301,7 +420,7 @@ export const ContentSearchDialog = (props) => {
               </div>
             ))}
           </>
-        )}
+        )} */}
       </DialogContent>
     </Dialog>
   );

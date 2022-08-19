@@ -8,26 +8,37 @@ import {
   Card,
   Checkbox,
   Chip,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
 
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { API_SERVICE } from "src/config";
+import { useAuth } from "src/hooks/use-auth";
+
 export const CustomerListResults = ({ customers, ...rest }) => {
+  const { setSelectedTask, handleOpenSearchDialog, setToggler } = rest;
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+
+  const { user } = useAuth();
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedCustomerIds = customers.map((customer) => customer._id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -63,6 +74,24 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
+  const deleteTask = async (id) => {
+    try {
+      const response = await fetch(`${API_SERVICE}/delete_task/${id}/${user?.id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        alert("Task deleted");
+        setToggler();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -82,53 +111,70 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>Task</TableCell>
-                <TableCell>Assigned to</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Assigned on</TableCell>
-                <TableCell>Status</TableCell>
+                {/* <TableCell>Assigned to</TableCell> */}
+                <TableCell>Assigned To</TableCell>
+                <TableCell>Assigned On</TableCell>
+                <TableCell>Due Date</TableCell>
+                <TableCell>Points</TableCell>
+                <TableCell>Created At</TableCell>
+
+                {/* <TableCell>Status</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
-                    />
-                  </TableCell>
-                  <TableCell>{customer.task}</TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
-                      </Avatar>
-                      <Typography color="textPrimary" variant="body1">
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell>{format(customer.createdAt, "dd/MM/yyyy")}</TableCell>
-                  <TableCell>
-                    {customer.status == "completed" ? (
-                      <Chip label={customer.status} color="success" />
-                    ) : (
-                      <Chip label={customer.status} color="error" />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {customers.slice(0, limit).map((customer) => {
+                var color;
+                if (customer.status == 0) {
+                  color = "#D14343";
+                } else {
+                  color = "#14B8A6";
+                }
+                return (
+                  <TableRow
+                    style={{ backgroundColor: color }}
+                    hover
+                    key={customer._id}
+                    selected={selectedCustomerIds.indexOf(customer._id) !== -1}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedCustomerIds.indexOf(customer._id) !== -1}
+                        onChange={(event) => handleSelectOne(event, customer._id)}
+                        value="true"
+                      />
+                    </TableCell>
+                    <TableCell>{customer.name}</TableCell>
+                    {/* <TableCell>
+                      <Box
+                        sx={{
+                          alignItems: "center",
+                          display: "flex",
+                        }}
+                      >
+                        <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
+                          {getInitials(customer.name)}
+                        </Avatar>
+                        <Typography color="textPrimary" variant="body1">
+                          {customer.name}
+                        </Typography>
+                      </Box>
+                    </TableCell> */}
+                    <TableCell>{customer.assignedTo}</TableCell>
+                    <TableCell>{customer.fromDate}</TableCell>
+                    <TableCell>{customer.targetDate}</TableCell>
+                    <TableCell>{customer.points}</TableCell>
+                    <TableCell>{customer.createdAt.split("T")[0]}</TableCell>
+
+                    {/* <TableCell>
+                      {customer.status == "completed" ? (
+                        <Chip label={customer.status} color="success" />
+                      ) : (
+                        <Chip label={customer.status} color="error" />
+                      )}
+                    </TableCell> */}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </Box>

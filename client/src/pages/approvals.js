@@ -4,6 +4,7 @@ import { ApprovalListResults } from "../components/approval/approval-list-result
 import { ApprovalListToolbar } from "../components/approval/approval-list-toolbar";
 import { DashboardLayout } from "../components/dashboard-layout";
 import approvals from "../__mocks__/approvals";
+import { AuthGuard } from "src/components/authentication/auth-guard";
 
 const Customers = () => (
   <>
@@ -26,6 +27,10 @@ const Customers = () => (
     </Box>
   </>
 );
-Customers.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Customers.getLayout = (page) => (
+  <DashboardLayout>
+    <AuthGuard> {page}</AuthGuard>
+  </DashboardLayout>
+);
 
 export default Customers;
