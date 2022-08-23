@@ -8,7 +8,8 @@ export const TotalCustomers = (props) => (
       <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
         <Grid item>
           <Typography color="textSecondary" gutterBottom variant="overline">
-            TASKS FOR APPROVAL
+            {/* TASKS FOR APPROVAL */}
+            {props.flag === 1 ? "TASKS APPROVED" : "TASKS FOR APPROVAL"}
           </Typography>
           <Typography color="textPrimary" variant="h4">
             {props?.tasks}

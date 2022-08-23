@@ -56,8 +56,24 @@ const editUser = async (req, res) => {
   );
 };
 
+// const editUser2 = async (req, res) => {
+//   res.setHeader("Content-Type", "application/json");
+
+//   User.updateOne(
+//     { userId: req.params.email },
+//     {
+//       $set: req.body,
+//     },
+//     (err) => {
+//       if (err) res.status(400).json(`Error: ${err}`);
+//       else res.status(200).json("Edited a user");
+//     }
+//   );
+// };
+
 module.exports = {
   createOrUpdateUser,
   getUser,
   editUser,
+  // editUser2,
 };

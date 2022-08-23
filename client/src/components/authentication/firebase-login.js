@@ -155,10 +155,11 @@
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Alert, Box, Button, Divider, FormHelperText, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, FormHelperText, Snackbar, TextField, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/use-auth";
 import { useMounted } from "../../hooks/use-mounted";
 import firebase from "../../lib/firebase";
+import { useState } from "react";
 
 export const FirebaseLogin = (props) => {
   const isMounted = useMounted();
@@ -205,6 +206,20 @@ export const FirebaseLogin = (props) => {
       console.error(err);
     }
   };
+
+  const [open, setOpen] = useState(false)
+  const handleClick = () => {
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 3000);
+  }
+
+  const action = (
+    <Typography>
+      
+    </Typography>
+  );
 
   return (
     <div {...props}>
@@ -284,6 +299,7 @@ export const FirebaseLogin = (props) => {
             size="large"
             type="submit"
             variant="contained"
+            onClick={handleClick}
           >
             Log In
           </Button>
@@ -302,6 +318,14 @@ export const FirebaseLogin = (props) => {
           </Alert>
         </Box> */}
       </form>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        // onClose={handleClose}
+        message="Logged In successfully"
+        // action={action}
+      />
     </div>
   );
 };

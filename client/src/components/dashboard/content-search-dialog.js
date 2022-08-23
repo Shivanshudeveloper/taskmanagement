@@ -76,6 +76,7 @@ export const ContentSearchDialog = (props) => {
   };
 
   const createTask = async () => {
+    console.log("hello 55")
     try {
       const response = await fetch(`${API_SERVICE}/add_task`, {
         method: "POST",
@@ -83,7 +84,7 @@ export const ContentSearchDialog = (props) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, userId: user?.id }),
+        body: JSON.stringify({ ...state, userId: user?.id, approved: 0 }),
       });
       if (response.status === 200) {
         onClose();

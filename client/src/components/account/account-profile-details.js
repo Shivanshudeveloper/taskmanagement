@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -9,31 +9,117 @@ import {
   Grid,
   TextField
 } from '@mui/material';
+import firebase from "../../lib/firebase";
+import { API_SERVICE } from "src/config";
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
+// const states = [
+//   {
+//     value: 'alabama',
+//     label: 'Alabama'
+//   },
+//   {
+//     value: 'new-york',
+//     label: 'New York'
+//   },
+//   {
+//     value: 'san-francisco',
+//     label: 'San Francisco'
+//   }
+// ];
 
 export const AccountProfileDetails = (props) => {
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    // state: 'Alabama',
+    // country: 'USA'
   });
+
+  useEffect(async () => {
+    const userId = sessionStorage.getItem("userId");
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+      console.log(user);
+      
+      try {
+        const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          // body: JSON.stringify({
+          //   first: values.firstName || "",
+          //   last: values.lastName || "",
+          //   contact: values.phone || "",
+          // }),
+        });
+  
+        if(response.status === 200){
+          const userData = await response.json();
+          console.log(userData);
+          // console.log("user updated");
+          setValues({
+            ...values,
+            firstName: userData.first,
+            lastName: userData.last,
+            phone: userData.contact,
+            email: user.email
+          })
+          
+          sessionStorage.setItem("last", values.lastName)
+          sessionStorage.setItem("first", values.firstName)
+          sessionStorage.setItem("contact", values.phone)
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    })
+
+  }, [])
+
+  const handleSubmit = async() => {
+    
+    const userId = sessionStorage.getItem("userId");
+
+    // firebase.auth().onAuthStateChanged(async (user) => {
+
+      // console.log(user);
+
+      try {
+        const response = await fetch(`${API_SERVICE}/edit_user/${userId}`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            first: values.firstName || "",
+            last: values.lastName || "",
+            contact: values.phone || "",
+          }),
+        });
+  
+        if(response.status === 200){
+          sessionStorage.setItem("last", values.lastName)
+          sessionStorage.setItem("first", values.firstName)
+          sessionStorage.setItem("contact", values.phone)
+          const userData = await response.json();
+          console.log(userData);
+          console.log("user updated");
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+      
+
+    // })
+
+  }
 
   const handleChange = (event) => {
     setValues({
@@ -95,7 +181,8 @@ export const AccountProfileDetails = (props) => {
               md={6}
               xs={12}
             >
-              <TextField
+              <TextField 
+                disabled
                 fullWidth
                 label="Email Address"
                 name="email"
@@ -120,7 +207,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
+            {/* <Grid
               item
               md={6}
               xs={12}
@@ -134,8 +221,8 @@ export const AccountProfileDetails = (props) => {
                 value={values.country}
                 variant="outlined"
               />
-            </Grid>
-            <Grid
+            </Grid> */}
+            {/* <Grid
               item
               md={6}
               xs={12}
@@ -160,7 +247,7 @@ export const AccountProfileDetails = (props) => {
                   </option>
                 ))}
               </TextField>
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />
@@ -174,6 +261,7 @@ export const AccountProfileDetails = (props) => {
           <Button
             color="primary"
             variant="contained"
+            onClick={handleSubmit}
           >
             Save details
           </Button>

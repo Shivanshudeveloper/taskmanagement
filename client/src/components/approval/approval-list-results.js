@@ -23,11 +23,14 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
+import { API_SERVICE } from "src/config";
+import { useAuth } from "src/hooks/use-auth";
 
 export const ApprovalListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const { user } = useAuth();
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -68,6 +71,31 @@ export const ApprovalListResults = ({ customers, ...rest }) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
+  const handleClick = async (task) => {
+    // console.log(approved)
+    task.approved = (task.approved === 1 ? 0 : 1);
+    console.log(task._id);
+    console.log(task.userId)
+    console.log(user?.id);
+    try {
+      const response = await fetch(`${API_SERVICE}/edit_task/${task._id}/${user?.id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({...task})
+      });
+      if (response.status === 200) {
+        alert("Task Updated");
+        const userData = await response.json();
+        console.log(userData);
+        // setToggler();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <Card {...rest}>
@@ -88,10 +116,10 @@ export const ApprovalListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell> */}
                 <TableCell>Task Name</TableCell>
-                <TableCell>User</TableCell>
+                <TableCell>Assigned To</TableCell>
                 <TableCell>From Date</TableCell>
                 <TableCell>Due Date</TableCell>
-                <TableCell>Time Taken</TableCell>
+                {/* <TableCell>Time Taken</TableCell> */}
                 <TableCell>Marks</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
@@ -100,7 +128,7 @@ export const ApprovalListResults = ({ customers, ...rest }) => {
               {customers.slice(0, limit).map((customer) => (
                 <TableRow
                   hover
-                  key={customer.id}
+                  key={customer._id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                 >
                   {/* <TableCell padding="checkbox">
@@ -119,28 +147,33 @@ export const ApprovalListResults = ({ customers, ...rest }) => {
                       }}
                     >
                       <Typography color="textPrimary" variant="body1">
-                        {customer.user}
+                        {customer.assignedTo}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>{format(customer.from, "dd/MM/yyyy")}</TableCell>
-                  <TableCell>{format(customer.due, "dd/MM/yyyy")}</TableCell>
-                  <TableCell>{`${customer.time} secs`}</TableCell>
-                  <TableCell>{customer.marks}</TableCell>
+                  <TableCell>{customer.fromDate}</TableCell>
+                  <TableCell>{customer.targetDate}</TableCell>
+                  {/* <TableCell>{`${customer.time} secs`}</TableCell> */}
+                  <TableCell>{customer.points}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={2}>
-                      <Button size="small" variant="contained" color="success">
-                        <ThumbUpOffAltIcon fontSize="200%"></ThumbUpOffAltIcon>
+                      <Button size="small" 
+                        variant="contained" 
+                        color="success" 
+                        onClick={() => handleClick(customer)}
+                      >
+                        <ThumbUpOffAltIcon fontSize="200%"></ThumbUpOffAltIcon >
+                        {customer.approved}
                       </Button>
-                      <Button variant="contained" color="warning">
+                      {/* <Button variant="contained" color="warning">
                         <ArrowBackIcon fontSize="40px"></ArrowBackIcon>
-                      </Button>
+                      </Button> */}
                       <Button variant="contained" color="error">
                         <CancelIcon fontSize="40px"></CancelIcon>
                       </Button>
-                      <Button variant="contained" color="info">
+                      {/* <Button variant="contained" color="info">
                         <DoNotDisturbOnIcon fontSize="40px"></DoNotDisturbOnIcon>
-                      </Button>
+                      </Button> */}
                     </Stack>
                   </TableCell>
 

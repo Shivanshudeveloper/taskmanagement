@@ -28,6 +28,10 @@ const items = [
     title: "Task",
   },
   {
+    href: "/tasksAssigned",
+    title: "Tasks Assigned"
+  },
+  {
     href: "/approvals",
     icon: <SelectorIcon fontSize="small" />,
     title: "Approvals",

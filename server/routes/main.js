@@ -22,12 +22,17 @@ router.delete("/delete_task/:taskId/:userId", taskController.deleteTask);
 // Get a single task
 router.get("/get_creator_by_id/:taskId", taskController.getSpecificTask);
 //Patch a task
-router.patch("/edit_task/:taskId/:userId", taskController.editTask);
+router.put("/edit_task/:taskId/:userId", taskController.editTask);
+//get task assigned to a user
+router.get("/get_all_tasks_mail/:assignedTo", taskController.getAllTasksUsingEmail)
+//get task assigned to a user
+router.get("/get_all_tasks_complete/:userId", taskController.getAllCompleteTasks)
 
 // User Data
 // Add user data
 router.post("/add_user", userController.createOrUpdateUser);
 router.get("/get_user/:userId", userController.getUser);
 router.post("/edit_user/:userId", userController.editUser);
+// router.post("/edit_user2/:email", userController.editUser2);
 
 module.exports = router;

@@ -92,6 +92,7 @@ export const AuthProvider = (props) => {
                   },
                 },
               });
+              sessionStorage.setItem("userId", user.uid);
               router.push("/dashboard");
             }
           } catch (err) {

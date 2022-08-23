@@ -75,7 +75,7 @@ export const TaskListToolbar = (props) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, userId: user?.id }),
+        body: JSON.stringify({ ...state, userId: user?.id, approved: 0 }),
       });
       if (response.status === 200) {
         handleCloseSearchDialog();

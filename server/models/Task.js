@@ -36,10 +36,14 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  approved: {
+    type: Number,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now,
-  },
+  }
 });
 
 const task = mongoose.model("task", taskSchema);
