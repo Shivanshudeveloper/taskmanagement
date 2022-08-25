@@ -26,5 +26,6 @@ export const gtmConfig = {
   containerId: process.env.NEXT_PUBLIC_GTM_CONTAINER_ID,
 };
 
-export const API_SERVICE = "http://localhost:5000/api/v1/main";
+export const API_SERVICE = "https://task-manager-dpl.herokuapp.com/api/v1/main";
+// export const API_SERVICE = "http://localhost:5000/api/v1/main";
 // export const API_SERVICE = "https://task-management-sass.herokuapp.com/api/v1/main";
