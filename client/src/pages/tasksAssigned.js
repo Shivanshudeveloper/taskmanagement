@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Checkbox, Container, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Checkbox, Container, Grid, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useAuth } from 'src/hooks/use-auth';
 
@@ -9,6 +9,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { Budget } from 'src/components/dashboard/budget';
 import { TotalCustomers } from 'src/components/dashboard/total-customers';
 import { TasksProgress } from 'src/components/dashboard/tasks-progress';
+import TasksAssignedTable from 'src/components/tasksAssigned/tasks-assigned-table';
 
 const tasksAssigned = () => {
 
@@ -63,35 +64,6 @@ const tasksAssigned = () => {
       console.log("approv", totApprov);
     }, [tasks])
 
-    const handleSelectOne = async (task) => {
-        if(task.approved === 1){
-          return;
-        }
-        // task.status = 1;
-        // console.log({...task});
-        task.status = (task.status === 1 ? 0 : 1);
-        // console.log(task._id);
-        // console.log(user?.id);
-        try {
-          const response = await fetch(`${API_SERVICE}/edit_task/${task._id}/${task.userId}`, {
-            method: "PUT",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({...task})
-          });
-          if (response.status === 200) {
-            alert("Task Updated");
-            const userData = await response.json();
-            console.log(userData);
-            // setToggler();
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
   return (
     <>
       <Container>
@@ -125,53 +97,9 @@ const tasksAssigned = () => {
           </Grid>
 
         <Typography variant='h3' align='center' margin='40px'>Tasks Assigned</Typography>
-        <PerfectScrollbar>
-            <Box sx={{ minWidth: 500 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Task</TableCell>
-                    <TableCell>Assigned On</TableCell>
-                    <TableCell>Due Date</TableCell>
-                    <TableCell>Points</TableCell>
-                    <TableCell>Created At</TableCell>
-                    {/* <TableCell>Action</TableCell> */}
-                    <TableCell>Status</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {
-                    tasks.map(task => (
-                      <TableRow
-                        hover
-                        key={task._id}
-                      >
-                        <TableCell>{task.name}</TableCell>
-                        <TableCell>{task.fromDate}</TableCell>
-                        <TableCell>{task.targetDate}</TableCell>
-                        <TableCell>{task.points}</TableCell>
-                        <TableCell>{task.createdAt.split("T")[0]}</TableCell>
-                        <TableCell padding="checkbox">
-                          <Button 
-                            variant="contained" 
-                            color={task.status === 1 ? "success" : "error"} 
-                            onClick={() => handleSelectOne(task)}
-                          >
-                            {/* {task.status === 1 ? "Complete" : "Incomplete"} */}
-                            {task.status === 0 ? "Inomplete" : (task.approved === 1) ? "Approved" : "Complete"}
-                          </Button>
-                          {/* <Button variant="contained" color="error">
-                            Error
-                          </Button> */}
-                        </TableCell>
-                      </TableRow>
-
-                    ))
-                  }
-                </TableBody>
-              </Table>
-            </Box>
-        </PerfectScrollbar>
+        <TasksAssignedTable
+          tasks={tasks}
+        />
       </Container>
     </>
   )

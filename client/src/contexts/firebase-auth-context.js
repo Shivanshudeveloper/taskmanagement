@@ -70,6 +70,7 @@ export const AuthProvider = (props) => {
               },
               body: JSON.stringify({
                 userId: user.uid,
+                userType: "user",
                 first: first || "",
                 last: last || "",
                 contact: contact || "",
@@ -93,7 +94,33 @@ export const AuthProvider = (props) => {
                 },
               });
               sessionStorage.setItem("userId", user.uid);
-              router.push("/dashboard");
+
+              try {
+                const response = await fetch(`${API_SERVICE}/get_user/${user.uid}`, {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                });
+          
+                if(response.status === 200){
+                  const userData = await response.json();
+                  // console.log(userData);
+                  // console.log(userData, "hiiii");
+                  if(userData.userType === "user"){
+                    router.push("/tasksAssigned");
+                  }
+                  else {
+                    router.push("/dashboard")
+                  }
+                }
+                
+              } catch (error) {
+                console.log(error);
+              }
+
+              
             }
           } catch (err) {
             console.log(err);

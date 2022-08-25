@@ -90,6 +90,7 @@ export const ApprovalListResults = ({ customers, ...rest }) => {
         alert("Task Updated");
         const userData = await response.json();
         console.log(userData);
+        window.location.reload();
         // setToggler();
       }
     } catch (err) {

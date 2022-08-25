@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
@@ -15,36 +15,52 @@ import { Users as UsersIcon } from "../icons/users";
 import { XCircle as XCircleIcon } from "../icons/x-circle";
 import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
+import firebase from "../lib/firebase";
+import { API_SERVICE } from "src/config";
+import SummarizeRoundedIcon from '@mui/icons-material/SummarizeRounded';
 
 const items = [
   {
     href: "/dashboard",
     icon: <ChartBarIcon fontSize="small" />,
     title: "Dashboard",
+    access: "admin",
+  },
+  {
+    href: "/reports",
+    icon: <SummarizeRoundedIcon fontSize="small" />,
+    title: "Reports",
+    access: "admin",
   },
   {
     href: "/tasks",
     icon: <SelectorIcon fontSize="small" />,
     title: "Task",
+    access: "admin",
   },
   {
     href: "/tasksAssigned",
-    title: "Tasks Assigned"
+    icon: <SelectorIcon fontSize="small" />,
+    title: "Tasks Assigned",
+    access: "user",
   },
   {
     href: "/approvals",
     icon: <SelectorIcon fontSize="small" />,
     title: "Approvals",
+    access: "admin",
   },
   {
     href: "/account",
     icon: <UserIcon fontSize="small" />,
     title: "Account",
+    access: "admin user",
   },
   {
     href: "/settings",
     icon: <CogIcon fontSize="small" />,
     title: "Settings",
+    access: "admin user",
   },
 ];
 
@@ -55,6 +71,38 @@ export const DashboardSidebar = (props) => {
     defaultMatches: true,
     noSsr: false,
   });
+
+  const [userAccess, setUserAccess] = useState("user");
+
+  useEffect(async () => {
+    const userId = sessionStorage.getItem("userId");
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+      console.log(user);
+      
+      try {
+        const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if(response.status === 200){
+          const userData = await response.json();
+          console.log(userData);
+          setUserAccess(userData.userType);
+          console.log(userAccess);
+          // console.log("user updated");
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    })
+
+  }, [])
 
   useEffect(
     () => {
@@ -131,7 +179,8 @@ export const DashboardSidebar = (props) => {
         />
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item) => (
-            <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+              item.access.includes(userAccess) &&
+              <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
           ))}
         </Box>
         <Divider sx={{ borderColor: "#2D3748" }} />
