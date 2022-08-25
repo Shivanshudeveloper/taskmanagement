@@ -18,6 +18,7 @@ const tasksAssigned = () => {
     // const [totTasks, setTotTasks] = useState(0);
     const [totApprov, setTotApprov] = useState(0);
     const [totComp, setTotComp] = useState(0);
+    const [totMarks, setTotMarks] = useState(0);
     // let totTasks = 0;
     
     useEffect(async () => {
@@ -58,6 +59,8 @@ const tasksAssigned = () => {
         if(task.approved === 1)
         {
           setTotApprov(totApprov + 1);
+          setTotMarks(totMarks + task?.points);
+          console.log(totMarks);
         }
       })
       console.log("comp", totComp)
@@ -68,17 +71,17 @@ const tasksAssigned = () => {
     <>
       <Container>
 
-          <Grid container spacing={3} marginTop='40px' >
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Grid container spacing={2} marginTop='40px' >
+            <Grid item xl={1} lg={12/5} sm={6} xs={12}>
               <Budget tasks={tasks.length} />
             </Grid>
-            <Grid item xl={3} lg={3} sm={6} xs={12}>
+            <Grid item xl={1} lg={12/5} sm={6} xs={12}>
               <TotalCustomers tasks={totApprov} flag={1}/>
             </Grid>
-            <Grid item xl={3} lg={3} sm={6} xs={12}>
+            <Grid item xl={1} lg={12/5} sm={6} xs={12}>
               <TasksProgress tasks={totComp} />
             </Grid>
-            <Grid item xl={3} lg={3} sm={6} xs={12}>
+            <Grid item xl={1} lg={12/5} sm={6} xs={12}>
               <Card sx={{ height: "100%" }}>
                 <CardContent>
                   <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
@@ -88,6 +91,22 @@ const tasksAssigned = () => {
                       </Typography>
                       <Typography color="textPrimary" variant="h4">
                         {tasks.length - totComp}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xl={1} lg={12/5} sm={6} xs={12}>
+              <Card sx={{ height: "100%" }}>
+                <CardContent>
+                  <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
+                    <Grid item>
+                      <Typography color="textSecondary" gutterBottom variant="overline">
+                        TOTAL MARKS
+                      </Typography>
+                      <Typography color="textPrimary" variant="h4">
+                        {totMarks}
                       </Typography>
                     </Grid>
                   </Grid>

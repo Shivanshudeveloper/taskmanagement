@@ -148,7 +148,7 @@ const TasksAssignedTable = ({tasks}) => {
                               onClick={() => handleChangeTask(task)}
                             >
                               {/* {task.status === 1 ? "Complete" : "Incomplete"} */}
-                              {task.status === 0 ? "Mark as complete" : (task.approved === 1) ? "Approved" : "Complete"}
+                              {task.status === 0 ? "Mark as complete" : (task.approved === 1) ? "Approved" : "Mark as incomplete"}
                             </Button>
                           </Stack>
                           {/* <Button variant="contained" color="error">
