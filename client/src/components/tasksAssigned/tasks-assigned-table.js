@@ -127,37 +127,45 @@ const TasksAssignedTable = ({tasks}) => {
                 </TableHead>
                 <TableBody>
                   {
-                    tasks.map((task, i) => (
-                      <TableRow
-                        hover
-                        key={task._id}
-                      >
-                        <TableCell>{task.name}</TableCell>
-                        <TableCell>{task.fromDate}</TableCell>
-                        <TableCell>{task.targetDate}</TableCell>
-                        <TableCell>{task.points}</TableCell>
-                        <TableCell>{task.createdAt.split("T")[0]}</TableCell>
-                        <TableCell padding="checkbox">
-                          <Stack direction='row' spacing={2} paddingRight='24px'>
-                            <Button onClick={() => handleOpenSearchDialog(i)}>
-                              View
-                            </Button>
-                            <Button 
-                              variant="contained" 
-                              color={task.status === 1 ? "success" : "error"} 
-                              onClick={() => handleChangeTask(task)}
-                            >
-                              {/* {task.status === 1 ? "Complete" : "Incomplete"} */}
-                              {task.status === 0 ? "Mark as complete" : (task.approved === 1) ? "Approved" : "Mark as incomplete"}
-                            </Button>
-                          </Stack>
-                          {/* <Button variant="contained" color="error">
-                            Error
-                          </Button> */}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
+                    tasks.map((task, i) => {
+                      var color;
+                      if (task.status == 0) {
+                        color = "#D14343";
+                      } else {
+                        color = "#14B8A6";
+                      }
+                      return (
+                          <TableRow
+                            style={{ backgroundColor: color }}
+                            hover
+                            key={task._id}
+                          >
+                            <TableCell>{task.name}</TableCell>
+                            <TableCell>{task.fromDate}</TableCell>
+                            <TableCell>{task.targetDate}</TableCell>
+                            <TableCell>{task.points}</TableCell>
+                            <TableCell>{task.createdAt.split("T")[0]}</TableCell>
+                            <TableCell padding="checkbox">
+                              <Stack direction='row' spacing={2} paddingRight='24px'>
+                                <Button variant='contained' onClick={() => handleOpenSearchDialog(i)}>
+                                  View
+                                </Button>
+                                <Button 
+                                  variant="contained" 
+                                  color={task.status === 1 ? "success" : "error"} 
+                                  onClick={() => handleChangeTask(task)}
+                                >
+                                  {/* {task.status === 1 ? "Complete" : "Incomplete"} */}
+                                  {task.status === 0 ? "Mark as complete" : (task.approved === 1) ? "Approved" : "Mark as incomplete"}
+                                </Button>
+                              </Stack>
+                              {/* <Button variant="contained" color="error">
+                                Error
+                              </Button> */}
+                            </TableCell>
+                          </TableRow>
+                      );
+                    })}
                 </TableBody>
               </Table>
               

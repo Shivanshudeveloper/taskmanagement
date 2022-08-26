@@ -1,4 +1,4 @@
-import { Box, Card, Checkbox, Grid, Table, TableBody, TableCell, TableHead, TablePagination, TableRow } from '@mui/material'
+import { Box, Button, Card, Checkbox, Grid, Table, TableBody, TableCell, TableHead, TablePagination, TableRow } from '@mui/material'
 import React, { useState } from 'react'
 import ReactHtmlTableToExcel from 'react-html-table-to-excel'
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -51,12 +51,18 @@ const ReportTable = ({customers}) => {
         setPage(newPage);
     };
 
+    const handlePrint = () => {
+        window.print();
+    }
   return (
     <Card >
         <PerfectScrollbar>
             <Box sx={{ minWidth: 500 }}>
                 <Grid flexDirection='row' sx={{ minWidth: 500 }} display='flex' justifyContent='space-between' padding='12px 20px'>
                     <h3>All Tasks</h3>
+                    <Button onClick={handlePrint}>
+                        Print
+                    </Button>
                     <ReactHtmlTableToExcel
                         id="test-table-xls-button"
                         className="download-table-xls-button"

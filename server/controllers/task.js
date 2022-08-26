@@ -3,19 +3,45 @@ const Task = require("../models/Task");
 const CC = require("currency-converter-lt");
 
 const createTask = (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   
+  // res.setHeader("Content-Type", "application/json");
+
+  // const newTask = new Task({
+  //   ...req.body,
+  // });
+
+  // newTask.save((err) => {
+  //   console.log(err);
+  //   if (err) res.status(400).json(`Error: ${err}`);
+  //   else res.status(200).json("added a new task");
+  // });
+
+  // console.log(req.body.assignedTo);
+  const {name, description, fromDate, targetDate, points, userId, approved } = req.body;
   res.setHeader("Content-Type", "application/json");
 
-  const newTask = new Task({
-    ...req.body,
-  });
+  req.body.assignedTo.forEach(mail => {
+    console.log(mail);
 
-  newTask.save((err) => {
-    console.log(err);
-    if (err) res.status(400).json(`Error: ${err}`);
-    else res.status(200).json("added a new task");
-  });
+    const newTask = new Task({
+      name,
+      description,
+      assignedTo: mail,
+      fromDate,
+      targetDate,
+      points,
+      userId,
+      approved
+    });
+
+    newTask.save((err) => {
+      console.log(err);
+      if (err) res.status(400).json(`Error: ${err}`);
+      // else res.write(json("added a new task"));
+    });
+  })
+  res.status(200).json("added a new task");
 };
 
 const getAllTasks = async (req, res) => {

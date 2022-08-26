@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -23,6 +23,9 @@ import {
   Menu,
   FormGroup,
   Switch,
+  Checkbox,
+  ListItemText,
+  OutlinedInput,
 } from "@mui/material";
 import { Search as SearchIcon } from "../../icons/search";
 
@@ -40,7 +43,7 @@ export const ContentSearchDialog = (props) => {
   const [showResults, setShowResults] = useState(false);
   const { onClose, open, selectedTask, setToggler, ...other } = props;
   const { user } = useAuth();
-  // const [user, setUser] = useState(null);
+  const [emails, setEmails] = useState([]);
   // const [marks, setMarks] = useState(null);
   // const [repeat, setRepeat] = useState(null);
 
@@ -49,11 +52,40 @@ export const ContentSearchDialog = (props) => {
   const [state, setState] = useState({
     name: "",
     description: "",
-    assignedTo: "",
+    // assignedTo: "",
     fromDate: "",
     targetDate: "",
     points: "",
   });
+
+  useEffect(async() => {
+    try {
+      const response = await fetch(`${API_SERVICE}/get_all_users`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if(response.status === 200){
+        const userData = await response.json();
+        // console.log(userData);
+        userData.forEach((data) => {
+          if(data?.email)
+          {
+            setEmails(emails => [...emails, data.email]);
+          }
+          // console.log(data?.email)
+        })
+        // setEmails(...emails, userData);
+        console.log(emails);
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const editTask = async () => {
     try {
@@ -75,6 +107,30 @@ export const ContentSearchDialog = (props) => {
     }
   };
 
+
+  const [personName, setPersonName] = useState([]);
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 150,
+      },
+    },
+  };
+  const handleSelectChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+    console.log(personName)
+  };
+
   const createTask = async () => {
     console.log("hello 55")
     try {
@@ -84,7 +140,7 @@ export const ContentSearchDialog = (props) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, userId: user?.id, approved: 0 }),
+        body: JSON.stringify({ ...state, userId: user?.id, approved: 0, assignedTo: [...personName] }),
       });
       if (response.status === 200) {
         onClose();
@@ -154,7 +210,7 @@ export const ContentSearchDialog = (props) => {
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField
+            {/* <TextField
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -163,7 +219,26 @@ export const ContentSearchDialog = (props) => {
               name="assignedTo"
               onChange={handleChange}
               value={state.assignedTo}
-            />
+            /> */}
+            <FormControl sx={{ m: 1, width: 250 }}>
+              <InputLabel>Assigned To</InputLabel>
+              <Select
+                id="multiple-checkbox"
+                multiple
+                value={personName}
+                onChange={handleSelectChange}
+                input={<OutlinedInput label="Tag" />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
+              >
+                {emails.map((name) => (
+                  <MenuItem key={name} value={name}>
+                    <Checkbox checked={personName.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
 
           <Grid item xs={12} md={6}>

@@ -74,6 +74,7 @@ export const AuthProvider = (props) => {
                 first: first || "",
                 last: last || "",
                 contact: contact || "",
+                email: user.email,
               }),
             });
             if (response.status === 200) {

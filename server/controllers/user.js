@@ -41,6 +41,19 @@ const getUser = async (req, res) => {
     });
 };
 
+const getAllUsers = async (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  User.find()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json(`Error: ${error}`);
+    });
+};
+
 const editUser = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
@@ -74,6 +87,7 @@ const editUser = async (req, res) => {
 module.exports = {
   createOrUpdateUser,
   getUser,
+  getAllUsers,
   editUser,
   // editUser2,
 };

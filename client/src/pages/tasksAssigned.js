@@ -20,6 +20,9 @@ const tasksAssigned = () => {
     const [totComp, setTotComp] = useState(0);
     const [totMarks, setTotMarks] = useState(0);
     // let totTasks = 0;
+
+    const [completeTasks, setCompleteTasks] = useState([]);
+    const [incompleteTasks, setIncompleteTasks] = useState([]);
     
     useEffect(async () => {
       try {
@@ -31,41 +34,45 @@ const tasksAssigned = () => {
           },
         });
         if (response.status === 200) {
-          const data = await response.json();
-          console.log(data);
-          setTasks(data);
+          const userData = await response.json();
+          // console.log(userData);
+          setTasks(userData);
+
+          userData.forEach((data) => {
+            if(data.status === 1)
+            {
+              if(data.approved === 0)
+              {
+                setCompleteTasks(completeTasks => [...completeTasks, data]);
+              }
+              // console.log(data.points)
+              setTotMarks(totMarks + data.points);
+              // console.log(data.name)
+              if(data.approved === 1)
+              {
+                setTotApprov(totApprov + 1);
+              }
+            }
+            // if(data.status === 1 && data.approved === 0){
+            //   setCompleteTasks(completeTasks => [...completeTasks, data]);
+            // }
+            else if(data.status === 0){
+              setIncompleteTasks(incompleteTasks => [...incompleteTasks, data]);
+            }
+          })
+
+          console.log(tasks)
+
         }
-        console.log(user?.email)
+
       } 
       catch (err) {
         console.log(err);
       };
-      
-      // tasks.map((task) => {
-      //   setTotTasks(totTasks + 1);
-      // })
-      // console.log("total", totTasks)
+
     }, [])
 
-    useEffect(() => {
-      tasks.map((task) => {
-        if(task.status === 1)
-        {
-          setTotComp(totComp + 1);
-        }
-        else {
-
-        }
-        if(task.approved === 1)
-        {
-          setTotApprov(totApprov + 1);
-          setTotMarks(totMarks + task?.points);
-          console.log(totMarks);
-        }
-      })
-      console.log("comp", totComp)
-      console.log("approv", totApprov);
-    }, [tasks])
+    
 
   return (
     <>
@@ -79,7 +86,7 @@ const tasksAssigned = () => {
               <TotalCustomers tasks={totApprov} flag={1}/>
             </Grid>
             <Grid item xl={1} lg={12/5} sm={6} xs={12}>
-              <TasksProgress tasks={totComp} />
+              <TasksProgress tasks={completeTasks.length} />
             </Grid>
             <Grid item xl={1} lg={12/5} sm={6} xs={12}>
               <Card sx={{ height: "100%" }}>
@@ -90,7 +97,7 @@ const tasksAssigned = () => {
                         INCOMPLETE TASKS
                       </Typography>
                       <Typography color="textPrimary" variant="h4">
-                        {tasks.length - totComp}
+                        {incompleteTasks.length}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -117,7 +124,7 @@ const tasksAssigned = () => {
 
         <Typography variant='h3' align='center' margin='40px'>Tasks Assigned</Typography>
         <TasksAssignedTable
-          tasks={tasks}
+          tasks={[...incompleteTasks, ...completeTasks]}
         />
       </Container>
     </>

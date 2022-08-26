@@ -31,6 +31,7 @@ router.get("/get_all_tasks_complete/:userId", taskController.getAllCompleteTasks
 // User Data
 // Add user data
 router.post("/add_user", userController.createOrUpdateUser);
+router.get("/get_all_users", userController.getAllUsers);
 router.get("/get_user/:userId", userController.getUser);
 router.post("/edit_user/:userId", userController.editUser);
 // router.post("/edit_user2/:email", userController.editUser2);
