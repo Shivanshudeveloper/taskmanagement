@@ -46,9 +46,20 @@ const createTask = (req, res) => {
 
 const getAllTasks = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
-  Task.find({ userId: req.params.userId })
+  // console.log(req.query.name)
+
+  if(req.query.name)
+  {
+    Task.find({ userId: req.params.userId, assignedTo: req.query.name })
+    .then((p) => res.status(200).json(p))
+    .catch((error) => res.status(400).json(error));  
+  }
+  else
+  {
+    Task.find({ userId: req.params.userId })
     .then((p) => res.status(200).json(p))
     .catch((error) => res.status(400).json(error));
+  }
 };
 
 const getAllTasksUsingEmail = async (req, res) => {
