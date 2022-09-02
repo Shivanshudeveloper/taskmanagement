@@ -1,10 +1,20 @@
+import { RemoveRedEye } from '@mui/icons-material';
 import { 
+    AppBar,
      Box,
      Button,
      Card,
      Checkbox, 
+     Dialog, 
+     Divider, 
      Grid,
+     IconButton,
      InputAdornment,
+     Link,
+     List,
+     ListItem,
+     ListItemText,
+     Slide,
      SvgIcon,
      Table,
      TableBody,
@@ -12,8 +22,12 @@ import {
      TableHead,
      TablePagination,
      TableRow,
-     TextField
- } from '@mui/material'
+     TextField,
+     Toolbar,
+    //  Tooltip
+ } from '@mui/material';
+ import CloseIcon from '@mui/icons-material/Close';
+// import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import ReactHtmlTableToExcel from 'react-html-table-to-excel'
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -32,6 +46,12 @@ import { API_SERVICE } from 'src/config';
 import { useAuth } from 'src/hooks/use-auth';
 import { Refresh } from 'src/icons/refresh';
 import { Search as SearchIcon } from "../../icons/search";
+import { Container } from '@mui/system';
+import ReportsTable from 'src/components/report/reportsTableDialog';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
 const ReportTable = ({customers}) => {
     const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -107,9 +127,29 @@ const ReportTable = ({customers}) => {
         setPage(newPage);
     };
 
-    const handlePrint = () => {
-        window.print();
-    }
+    // const handlePrint = () => {
+
+    //     window.print();
+    // }
+
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = async () => {
+        setOpen(true);
+
+        setTimeout(() => {
+            window.print();
+        }, 2000);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    // useEffect(() => {
+    //     if(open === true)   window.print();
+    // }, [open])
+
     const data = [
         {
           name: 'Page A',
@@ -185,7 +225,22 @@ const ReportTable = ({customers}) => {
                           variant="outlined"
                     />
                     <Grid item>
-                        <Button onClick={handlePrint}>
+                        {/* <Link
+                            passHref
+                            href={`/reportsTable`}
+                        >
+                            <a target="_blank" href={`/reportsTable?userId=${user?.id}`}>
+                                <Tooltip title="Task" >
+                                    <IconButton color="primary" sx={{ ml: 2 }} component="label">
+                                        <RemoveRedEye />
+                                    </IconButton>
+                                </Tooltip>
+                                <Button onClick={handlePrint} >
+                                    Print
+                                </Button>
+                            </a>
+                        </Link> */}
+                        <Button onClick={handleClickOpen} >
                             Print
                         </Button>
                         <ReactHtmlTableToExcel
@@ -313,6 +368,29 @@ const ReportTable = ({customers}) => {
             <Bar dataKey="points" fill="#8884d8" />
             {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
         </BarChart>
+
+        <Dialog
+            fullScreen
+            open={open}
+            onClose={handleClose}
+            // TransitionComponent={Transition}
+        >
+            <AppBar sx={{ position: 'relative' }} style={{marginBottom:'40px'}}>
+            <Toolbar >
+                <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+                >
+                <CloseIcon />
+                </IconButton>
+            </Toolbar>
+            </AppBar>
+            <Container>
+                <ReportsTable/>
+            </Container>
+      </Dialog>
     </Card>
   )
 }
