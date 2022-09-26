@@ -19,9 +19,10 @@ import { TotalCustomers } from "../../components/dashboard/total-customers";
 import { TotalProfit } from "../../components/dashboard/total-profit";
 import { TrafficByDevice } from "../../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../../components/dashboard-layout";
-
+import { useRouter } from 'next/router'
 import { CustomerListResults } from "../../components/customer/customer-list-results";
 import { CustomerListToolbar } from "../../components/customer/customer-list-toolbar";
+import { ApprovalListResults } from "../../components/approval/approval-list-results";
 
 // import { customers } from "../../__mocks__/customers";
 import { AuthGuard } from "src/components/authentication/auth-guard";
@@ -29,11 +30,34 @@ import { useEffect, useState } from "react";
 
 import { API_SERVICE } from "src/config";
 import { useAuth } from "src/hooks/use-auth";
+import { Router } from "next/router";
 
 const Dashboard = () => {
+  const router = useRouter();
   const [customers, setCustomers] = useState([]);
   const [month, setMonth] = useState(-1);
   const { user } = useAuth();
+
+  const [tasks, setTasks] = useState([]);
+  useEffect(async () => {
+      try {
+        const response = await fetch(`${API_SERVICE}/get_all_tasks_complete/${user?.id}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          const data = await response.json();
+          // console.log(data);
+          setTasks(data);
+          console.log(tasks)
+        }
+      } catch (err) {
+        console.log(err);
+      }
+  }, [])
 
   function checkMonth(m) {
     if (month === -1) {
@@ -101,6 +125,14 @@ const Dashboard = () => {
         }}
       >
         <Container maxWidth={false}>
+          <Button
+            color="primary"
+            variant="contained"
+            sx={{ float: 'right' }}
+            onClick={() => router.push('/tasks')}
+          >
+            Tasks
+          </Button>
           <Grid container spacing={3}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
               <Budget tasks={allTasks()?.length} />
@@ -111,7 +143,7 @@ const Dashboard = () => {
             <Grid item xl={3} lg={3} sm={6} xs={12}>
               <TasksProgress tasks={completedTasks()?.length} />
             </Grid>
-            <Grid item xl={3} lg={3} sm={6} xs={12} sx={{ display: "flex", alignItems: "center" }}>
+            {/* <Grid item xl={3} lg={3} sm={6} xs={12} sx={{ display: "flex", alignItems: "center" }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Select Month</InputLabel>
                 <Select
@@ -136,7 +168,7 @@ const Dashboard = () => {
                   <MenuItem value={11}>December</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
             {/* <Grid item xl={3} lg={3} sm={6} xs={12}>
               <TotalProfit sx={{ height: "100%" }} />
             </Grid> */}
@@ -191,6 +223,13 @@ const Dashboard = () => {
 
                   <Box sx={{ mt: 3 }}>
                     <CustomerListResults customers={pendingTasks()} />
+                  </Box>
+                </Container>
+
+                <Container sx={{ mt: 4 }} maxWidth={false}>
+                  <h3>Approval Tasks</h3>
+                  <Box sx={{ mt: 3 }}>
+                    <ApprovalListResults customers={tasks} />
                   </Box>
                 </Container>
               </Box>

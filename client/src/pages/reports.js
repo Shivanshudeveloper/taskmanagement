@@ -33,7 +33,6 @@ const Reports = () => {
     };
 
     const completedTasks = () => {
-        console.log("Hello");
         console.log(allTasks());
         return customers.filter((customer) => {
             return checkMonth(customer.createdAt) && customer.status === 1;
@@ -41,7 +40,6 @@ const Reports = () => {
     };
 
     const pendingTasks = () => {
-        console.log("Hello");
         return customers.filter((customer) => {
             return checkMonth(customer.createdAt) && customer.status === 0;
         });
