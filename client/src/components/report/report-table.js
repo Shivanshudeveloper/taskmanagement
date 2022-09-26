@@ -1,6 +1,7 @@
 import { RemoveRedEye } from '@mui/icons-material';
 import { 
     AppBar,
+     Autocomplete,
      Box,
      Button,
      Card,
@@ -58,8 +59,10 @@ const ReportTable = ({customers}) => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
     const [tasks, setTasks] = useState([]);
-    const [searchVal, setSearchVal] = useState('')
+    const [searchVal, setSearchVal] = useState('');
     
+    const [autoComp, setAutoComp] = useState([]);
+    // const autoComp = [];
 
     const fetchTasks = async (name='') => {
         // console.log(searchVal, name)
@@ -75,6 +78,20 @@ const ReportTable = ({customers}) => {
             const data = await response.json();
             console.log(data);
             setTasks(data);
+
+            const s = new Set(); //contains all emails for autocomplete
+            data.forEach(obj => {
+                s.add(obj.assignedTo.toString());
+            });
+            console.log(s);
+            const idx = 0;
+            s.forEach((elem) => {
+                autoComp.push({ label: elem.toString(), id: idx });
+                idx++;
+            });
+            console.log(autoComp)
+            // console.log(options)
+
             }
         } catch (err) {
             console.log(err);
@@ -221,9 +238,20 @@ const ReportTable = ({customers}) => {
                               </InputAdornment>
                             ),
                           }}
-                          placeholder="Search Task"
+                          placeholder="Search Email"
                           variant="outlined"
                     />
+                    {/* <Autocomplete
+                        // value={undefined}
+                        disablePortal
+                        id="combo-box-demo"
+                        options={ (autoComp.length === 0) ? [{label:"loading", id: 50}] : autoComp}
+                        sx={{ width: 500 }}
+                        renderInput={(params) => <TextField {...params} label="Search Emails" />}
+                        value={searchVal}
+                        onChange={(e) => setSearchVal(e.target.value)}
+                        onClick={() => fetchTasks(searchVal)}
+                        /> */}
                     <Grid item>
                         {/* <Link
                             passHref
