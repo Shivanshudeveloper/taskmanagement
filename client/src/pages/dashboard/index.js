@@ -129,9 +129,9 @@ const Dashboard = () => {
             color="primary"
             variant="contained"
             sx={{ float: 'right' }}
-            onClick={() => router.push('/tasks')}
+            onClick={() => router.push('/tasks?t=1')}
           >
-            Tasks
+            Add Tasks
           </Button>
           <Grid container spacing={3}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
@@ -219,6 +219,14 @@ const Dashboard = () => {
                 }}
               >
                 <Container maxWidth={false}>
+                  <h3>Approval Tasks</h3>
+                  <Box sx={{ mt: 3 }}>
+                    <ApprovalListResults customers={tasks} />
+                  </Box>
+                </Container>
+                
+                
+                <Container sx={{ mt: 4 }} maxWidth={false}>
                   <h3>Pending Tasks</h3>
 
                   <Box sx={{ mt: 3 }}>
@@ -226,12 +234,7 @@ const Dashboard = () => {
                   </Box>
                 </Container>
 
-                <Container sx={{ mt: 4 }} maxWidth={false}>
-                  <h3>Approval Tasks</h3>
-                  <Box sx={{ mt: 3 }}>
-                    <ApprovalListResults customers={tasks} />
-                  </Box>
-                </Container>
+                
               </Box>
             </Grid>
             {/* <Grid item md={6} xs={12}>

@@ -1,5 +1,7 @@
 import Head from "next/head";
 import { Box, Container } from "@mui/material";
+import queryString from "query-string";
+
 import { TaskListResults } from "../components/task/task-list-results";
 import { TaskListToolbar } from "../components/task/task-list-toolbar";
 import { DashboardLayout } from "../components/dashboard-layout";
@@ -71,6 +73,14 @@ const Customers = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const { t } = queryString.parse(window.location.search);
+    if (t) {
+      handleOpenSearchDialog();
+    }
+
+  }, []);
 
   useEffect(() => {
     fetchTasks();
