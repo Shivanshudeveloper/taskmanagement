@@ -148,7 +148,7 @@ export const TaskListToolbar = (props) => {
                 py: 2,
               }}
             >
-              <Typography variant="h6">Add Task</Typography>
+              <Typography variant="h6">Add Tasks</Typography>
               <IconButton color="inherit"></IconButton>
             </Box>
             <DialogContent>

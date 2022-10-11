@@ -17,7 +17,7 @@ import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 import firebase from "../lib/firebase";
 import { API_SERVICE } from "src/config";
-import SummarizeRoundedIcon from '@mui/icons-material/SummarizeRounded';
+import SummarizeRoundedIcon from "@mui/icons-material/SummarizeRounded";
 
 const items = [
   {
@@ -79,7 +79,7 @@ export const DashboardSidebar = (props) => {
 
     firebase.auth().onAuthStateChanged(async (user) => {
       console.log(user);
-      
+
       try {
         const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
           method: "GET",
@@ -88,21 +88,19 @@ export const DashboardSidebar = (props) => {
             "Content-Type": "application/json",
           },
         });
-  
-        if(response.status === 200){
+
+        if (response.status === 200) {
           const userData = await response.json();
           console.log(userData);
           setUserAccess(userData.userType);
           console.log(userAccess);
           // console.log("user updated");
         }
-        
       } catch (error) {
         console.log(error);
       }
-    })
-
-  }, [])
+    });
+  }, []);
 
   useEffect(
     () => {
@@ -125,6 +123,7 @@ export const DashboardSidebar = (props) => {
           display: "flex",
           flexDirection: "column",
           height: "100%",
+          backgroundColor: "#2F316B",
         }}
       >
         <div>
@@ -178,10 +177,12 @@ export const DashboardSidebar = (props) => {
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item) => (
-              item.access.includes(userAccess) &&
-              <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
-          ))}
+          {items.map(
+            (item) =>
+              item.access.includes(userAccess) && (
+                <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+              )
+          )}
         </Box>
         <Divider sx={{ borderColor: "#2D3748" }} />
         <Box
