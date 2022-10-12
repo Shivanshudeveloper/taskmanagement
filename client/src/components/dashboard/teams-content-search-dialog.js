@@ -39,7 +39,7 @@ import { useAuth } from "src/hooks/use-auth";
 
 
 
-export const ContentSearchDialog = (props) => {
+export const TeamsContentSearchDialog = (props) => {
   // const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -175,7 +175,7 @@ export const ContentSearchDialog = (props) => {
           py: 2,
         }}
       >
-        <Typography variant="h6">Add Task</Typography>
+        <Typography variant="h6">Add Team</Typography>
         <IconButton color="inherit"></IconButton>
       </Box>
       <DialogContent>
@@ -190,99 +190,14 @@ export const ContentSearchDialog = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              label="Task Name"
+              label="Full Name"
               name="name"
               onChange={handleChange}
               value={state.name}
             />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              InputLabelProps={{
-                shrink: true,
-              }}
-              multiline={true}
-              rows={4}
-              fullWidth
-              label="Additional Info"
-              name="description"
-              onChange={handleChange}
-              value={state.description}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            {/* <TextField
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              label="Assign To"
-              name="assignedTo"
-              onChange={handleChange}
-              value={state.assignedTo}
-            /> */}
-            <FormControl sx={{ m: 1, width: 250 }}>
-              <InputLabel>Assigned To</InputLabel>
-              <Select
-                id="multiple-checkbox"
-                multiple
-                value={personName}
-                onChange={handleSelectChange}
-                input={<OutlinedInput label="Tag" />}
-                renderValue={(selected) => selected.join(', ')}
-                MenuProps={MenuProps}
-              >
-                {emails.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox checked={personName.indexOf(name) > -1} />
-                    <ListItemText primary={name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              label="Points"
-              type="Number"
-              name="points"
-              onChange={handleChange}
-              value={state.points}
-            />
-          </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              type="date"
-              label="From Date"
-              name="fromDate"
-              onChange={handleChange}
-              value={state.fromDate}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              type="date"
-              label="Target Date"
-              name="targetDate"
-              onChange={handleChange}
-              value={state.targetDate}
-            />
-          </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -290,15 +205,34 @@ export const ContentSearchDialog = (props) => {
                 shrink: true,
               }}
               label="Phone Number"
-              name="phonenumber"
+              name="name"
               onChange={handleChange}
-              value={state.phonenumber}
+              value={state.name}
             />
           </Grid>
 
           <Grid item xs={12}>
-            <FormControlLabel control={<Switch defaultChecked />} label="DND" />
+            <TextField
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Email"
+              name="name"
+              onChange={handleChange}
+              value={state.name}
+            />
           </Grid>
+
+
+
+
+
+
+
+
+
+
 
           <Grid item sm={12}>
 
@@ -520,7 +454,7 @@ export const ContentSearchDialog = (props) => {
   );
 };
 
-ContentSearchDialog.propTypes = {
+TeamsContentSearchDialog.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
 };
