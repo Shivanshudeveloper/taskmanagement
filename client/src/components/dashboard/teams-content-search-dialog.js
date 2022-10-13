@@ -52,12 +52,9 @@ export const TeamsContentSearchDialog = (props) => {
   console.log(selectedTask);
 
   const [state, setState] = useState({
-    name: "",
-    description: "",
-    // assignedTo: "",
-    fromDate: "",
-    targetDate: "",
-    points: "",
+    fullname: "",
+    email: "",
+    phone_number: "",
   });
 
   useEffect(async () => {
@@ -132,20 +129,19 @@ export const TeamsContentSearchDialog = (props) => {
     console.log(personName)
   };
 
-  const createTask = async () => {
-    console.log("hello 55")
+  const createUser = async () => {
     try {
-      const response = await fetch(`${API_SERVICE}/add_task`, {
+      const response = await fetch(`${API_SERVICE}/add_team`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, userId: user?.id, approved: 0, assignedTo: [...personName] }),
+        body: JSON.stringify({ ...state, userId: user?.id}),
       });
       if (response.status === 200) {
         onClose();
-        alert("Task created");
+        alert("User created");
         setToggler();
       }
     } catch (err) {
@@ -159,7 +155,7 @@ export const TeamsContentSearchDialog = (props) => {
 
   const handleSubmit = async (event) => {
     console.log("Hello");
-    createTask();
+    createUser();
   };
 
   return (
@@ -191,13 +187,11 @@ export const TeamsContentSearchDialog = (props) => {
                 shrink: true,
               }}
               label="Full Name"
-              name="name"
+              name="fullname"
               onChange={handleChange}
-              value={state.name}
+              value={state.fullname}
             />
           </Grid>
-
-
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -205,12 +199,11 @@ export const TeamsContentSearchDialog = (props) => {
                 shrink: true,
               }}
               label="Phone Number"
-              name="name"
+              name="phone_number"
               onChange={handleChange}
-              value={state.name}
+              value={state.phone_number}
             />
           </Grid>
-
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -218,24 +211,12 @@ export const TeamsContentSearchDialog = (props) => {
                 shrink: true,
               }}
               label="Email"
-              name="name"
+              name="email"
               onChange={handleChange}
-              value={state.name}
+              value={state.email}
             />
           </Grid>
-
-
-
-
-
-
-
-
-
-
-
           <Grid item sm={12}>
-
             <Box textAlign="right">
               <Button
                 margin={2}
@@ -254,7 +235,7 @@ export const TeamsContentSearchDialog = (props) => {
                   if (selectedTask) {
                     editTask();
                   } else {
-                    createTask();
+                    createUser();
                   }
                 }}
               >
@@ -262,193 +243,7 @@ export const TeamsContentSearchDialog = (props) => {
               </Button>
             </Box>
           </Grid>
-
-          {/* <Grid item xs={12} md={6}>
-              <TextField fullWidth label="Enter task status" />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl component="fieldset">
-                <FormGroup aria-label="position" row>
-                  <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    <FormControlLabel
-                      textAlign="center"
-                      value="wnd"
-                      control={<Switch color="success" />}
-                      label="WND"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="notice"
-                      control={<Switch color="success" />}
-                      label="Notice"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="sms"
-                      control={<Switch color="success" />}
-                      label="SMS"
-                      labelPlacement="top"
-                    />
-                  </Stack>
-                </FormGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">User</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={user}
-                  label="User"
-                  fullWidth
-                  onChange={(e) => {
-                    setUser(e.target.value);
-                  }}
-                >
-                  <MenuItem value={10}>Public</MenuItem>
-                  <MenuItem value={20}>Admin</MenuItem>
-                  <MenuItem value={30}>Private</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Marks</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={marks}
-                  label="Marks"
-                  fullWidth
-                  onChange={(e) => {
-                    setMarks(e.target.value);
-                  }}
-                >
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={30}>30</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <TextField type="date" helperText="Start Date"></TextField>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <TextField type="date" helperText="End Date"></TextField>
-            </Grid>
-            <Grid item xs={12} md={4} textAlign="center">
-              <TextField center type="time" helperText="Time"></TextField>
-            </Grid>
-            <Grid item xs={12} textAlign="center" m={1}>
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">Priority</FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel value="high" control={<Radio />} label="High" />
-                  <FormControlLabel value="medium" control={<Radio />} label="Medium" />
-                  <FormControlLabel value="low" control={<Radio />} label="Low" />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item md={6} xs={12} m={1}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Repeat</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={repeat}
-                  label="Repeat"
-                  fullWidth
-                  onChange={(e) => {
-                    setRepeat(e.target.value);
-                  }}
-                >
-                  <MenuItem value="daily">Daily</MenuItem>
-                  <MenuItem value="weekly">Weekly</MenuItem>
-                  <MenuItem value="monthly">Monthly</MenuItem>
-                  <MenuItem value="3 months">3 Months</MenuItem>
-                  <MenuItem value="6 months">6 Months</MenuItem>
-                  <MenuItem value="yearly">Yearly</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item sm={12}>
-              <Box textAlign="right">
-                <Button
-                  margin={2}
-                  variant="contained"
-                  color="error"
-                  style={{ marginRight: "20px" }}
-                  onClick={onClose}
-                >
-                  Cancel
-                </Button>
-                <Button margin={2} variant="contained" color="primary">
-                  Submit
-                </Button>
-              </Box>
-            </Grid>{" "} */}
         </Grid>
-
-        {/* {isLoading && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mt: 3,
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        )}
-        {showResults && (
-          <>
-            {Object.keys(results).map((type, index) => (
-              <div key={index}>
-                <Typography sx={{ my: 2 }} variant="h6">
-                  {type}
-                </Typography>
-                <Box
-                  sx={{
-                    borderColor: "divider",
-                    borderRadius: 1,
-                    borderStyle: "solid",
-                    borderWidth: 1,
-                  }}
-                >
-                  {results[type].map((result, index) => (
-                    <Fragment key={result.title}>
-                      <Box sx={{ p: 2 }}>
-                        <Box
-                          sx={{
-                            alignItems: "center",
-                            display: "flex",
-                          }}
-                        >
-                          <Badge color="primary" sx={{ ml: 1 }} variant="dot" />
-                          <Typography variant="subtitle1" sx={{ ml: 2 }}>
-                            {result.title}
-                          </Typography>
-                        </Box>
-                        <Typography color="textSecondary" variant="body2">
-                          {result.path}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2" sx={{ mt: 1 }}>
-                          {result.description}
-                        </Typography>
-                      </Box>
-                      {index !== results[type].length - 1 && <Divider />}
-                    </Fragment>
-                  ))}
-                </Box>
-              </div>
-            ))}
-          </>
-        )} */}
       </DialogContent>
     </Dialog>
   );

@@ -14,7 +14,7 @@ import { useAuth } from "src/hooks/use-auth";
 
 const Teams = () => {
   const [selectedTask, setSelectedTask] = useState(null);
-  const [tasks, setTasks] = useState([]);
+  const [teams, setTeams] = useState([]);
   const { user } = useAuth();
   const [toggler, setToggler] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -48,16 +48,17 @@ const Teams = () => {
       if (response.status === 200) {
         const data = await response.json();
         console.log(data);
-        setTasks(data);
+        setTeams(data);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const fetchTasks = async () => {
+  const fetchTeams = async () => {
+    debugger;
     try {
-      const response = await fetch(`${API_SERVICE}/get_all_tasks/${user?.id}`, {
+      const response = await fetch(`${API_SERVICE}/get_all_teams/${user?.id}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -66,8 +67,7 @@ const Teams = () => {
       });
       if (response.status === 200) {
         const data = await response.json();
-        // console.log(data)
-        setTasks(data);
+        setTeams(data);
       }
     } catch (err) {
       console.log(err);
@@ -83,7 +83,7 @@ const Teams = () => {
   }, []);
 
   useEffect(() => {
-    fetchTasks();
+    fetchTeams();
   }, [toggler]);
   return (
     <>
@@ -108,7 +108,7 @@ const Teams = () => {
           />
         <Box sx={{ mt: 3 }}>
             <TeamsListResults
-              customers={tasks}
+              customers={teams}
               setSelectedTask={setSelectedTask}
               handleOpenSearchDialog={handleOpenSearchDialog}
               setToggler={() => setToggler(!toggler)}

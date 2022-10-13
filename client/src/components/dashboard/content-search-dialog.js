@@ -133,7 +133,10 @@ export const ContentSearchDialog = (props) => {
   };
 
   const createTask = async () => {
+    debugger;
     console.log("hello 55")
+   
+    smsSend();
     try {
       const response = await fetch(`${API_SERVICE}/add_task`, {
         method: "POST",
@@ -153,6 +156,33 @@ export const ContentSearchDialog = (props) => {
     }
   };
 
+  const smsSend = async () => {
+    debugger;
+    try {
+      const user="SANSKARDSA";
+      const pass= "s123456";
+      const sender="SANSKR";
+      const phone=state.phonenumber;
+      const text="Test SMS";
+      const priority="Priority";
+      const stype="smstype";
+      const response = await fetch(`http://bhashsms.com/api/sendmsg.php?user=${user}&pass=${pass}&sender=${sender}&phone=${phone}&text=${text}&priority=${priority}&stype=${stype}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }
+      });
+      if (response.status === 200) {
+        onClose();
+        alert("Task created");
+        setToggler();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+   
+  }
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };

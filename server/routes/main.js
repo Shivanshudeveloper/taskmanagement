@@ -6,6 +6,7 @@ const router = express.Router();
 
 const taskController = require("../controllers/task");
 const userController = require("../controllers/user");
+const teamController = require("../controllers/team");
 
 // Test route
 router.get("/test", (req, res) => {
@@ -35,5 +36,11 @@ router.get("/get_all_users", userController.getAllUsers);
 router.get("/get_user/:userId", userController.getUser);
 router.post("/edit_user/:userId", userController.editUser);
 // router.post("/edit_user2/:email", userController.editUser2);
+
+// Add a new task
+router.post("/add_team", teamController.createTeam);
+
+//Get all Tasks
+router.get("/get_all_teams/:userId", teamController.getAllTeams);
 
 module.exports = router;
