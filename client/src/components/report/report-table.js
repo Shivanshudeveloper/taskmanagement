@@ -8,6 +8,8 @@ import {
     Checkbox,
     Dialog,
     Divider,
+    MenuItem,
+    Select,
     Grid,
     IconButton,
     InputAdornment,
@@ -16,7 +18,9 @@ import {
     ListItem,
     ListItemText,
     Slide,
+    InputLabel,
     SvgIcon,
+     FormControl,
     Table,
     TableBody,
     TableCell,
@@ -60,10 +64,11 @@ const ReportTable = ({ customers }) => {
     const [page, setPage] = useState(0);
     const [tasks, setTasks] = useState([]);
     const [searchVal, setSearchVal] = useState('');
-
+    const [month, setMonth] = useState();
+    const [selectedCustomers, setSelectedCustomers]= useState([]);
     const [autoComp, setAutoComp] = useState([]);
     // const autoComp = [];
-
+console.log(selectedCustomers)
     const fetchTasks = async (name = '') => {
         // console.log(searchVal, name)
         try {
@@ -98,6 +103,21 @@ const ReportTable = ({ customers }) => {
             console.log(err);
         }
     };
+
+    const onMonthChange = (changedMonth) => {
+        if (changedMonth == 0 || changedMonth && changedMonth!=-1) {
+            var filtered2 = customers.filter(customer => {
+                const d = new Date(customer.fromDate);
+                let selected = d.getMonth();
+                return selected === changedMonth;
+            });
+            setSelectedCustomers(filtered2)
+        }
+        else {
+            console.log(customers)
+            setSelectedCustomers(customers)
+        }
+    }
 
     useEffect(() => {
         fetchTasks();
@@ -428,8 +448,53 @@ const ReportTable = ({ customers }) => {
                 rowsPerPage={limit}
                 rowsPerPageOptions={[5, 10, 25]}
             />
-
-            <BarChart
+            <Grid item xs={4}>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Select Month</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={month}
+                        label="Select Month"
+                        onChange={(e) => onMonthChange(e.target.value)}
+                    >
+                        <MenuItem value={-1}>All</MenuItem>
+                        <MenuItem value={0}>January</MenuItem>
+                        <MenuItem value={1}>February</MenuItem>
+                        <MenuItem value={2}>March</MenuItem>
+                        <MenuItem value={3}>April</MenuItem>
+                        <MenuItem value={4}>May</MenuItem>
+                        <MenuItem value={5}>June</MenuItem>
+                        <MenuItem value={6}>July</MenuItem>
+                        <MenuItem value={7}>August</MenuItem>
+                        <MenuItem value={8}>September</MenuItem>
+                        <MenuItem value={9}>October</MenuItem>
+                        <MenuItem value={10}>November</MenuItem>
+                        <MenuItem value={11}>December</MenuItem>
+                    </Select>
+                </FormControl>
+            </Grid>
+            
+            {(selectedCustomers.length>0) ? <BarChart
+                minWidth='500px'
+                width={1000}
+                height={600}
+                data={selectedCustomers}
+                margin={{
+                    top: 80,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="assignedTo" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="points" fill="#8884d8" />
+                {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
+            </BarChart> : <BarChart
                 minWidth='500px'
                 width={1000}
                 height={600}
@@ -448,7 +513,7 @@ const ReportTable = ({ customers }) => {
                 <Legend />
                 <Bar dataKey="points" fill="#8884d8" />
                 {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
-            </BarChart>
+            </BarChart>}
 
             <Dialog
                 fullScreen
