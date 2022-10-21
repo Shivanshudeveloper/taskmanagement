@@ -40,8 +40,33 @@ const Dashboard = () => {
 
   const [tasks, setTasks] = useState([]);
   useEffect(async () => {
+    const userId = sessionStorage.getItem("userId");
+    try {
+      const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        var userType=userData.userType
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
       try {
-        const response = await fetch(`${API_SERVICE}/get_all_tasks_complete/${user?.id}`, {
+        if(userType=="admin"){
+          var tasksCompleteUrl =`${API_SERVICE}/get_all_tasks_complete`
+        }
+        else{
+          var tasksCompleteUrl = `${API_SERVICE}/get_all_tasks_complete/${user?.id}`
+        }
+        
+        const response = await fetch(tasksCompleteUrl, {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -57,6 +82,7 @@ const Dashboard = () => {
       } catch (err) {
         console.log(err);
       }
+    fetchTasks(userType);
   }, [])
 
   function checkMonth(m) {
@@ -89,9 +115,15 @@ const Dashboard = () => {
     });
   };
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (userType) => {
+    if(userType=="admin"){
+      var tasksAllUrl =`${API_SERVICE}/get_all_tasks`
+    }
+    else{
+      var tasksAllUrl = `${API_SERVICE}/get_all_tasks/${user?.id}`
+    }
     try {
-      const response = await fetch(`${API_SERVICE}/get_all_tasks/${user?.id}`, {
+      const response = await fetch(tasksAllUrl, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -108,9 +140,9 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, []);
 
   return (
     <>

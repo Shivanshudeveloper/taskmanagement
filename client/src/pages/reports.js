@@ -45,9 +45,16 @@ const Reports = () => {
         });
     };
 
-    const fetchTasks = async () => {
+    const fetchTasks = async (userType) => {
+        if(userType=="admin"){
+          var tasksAllUrl =`${API_SERVICE}/get_all_tasks_complete`
+        }
+        else{
+          var tasksAllUrl = `${API_SERVICE}/get_all_tasks_complete/${user?.id}`
+        }
+        
         try {
-            const response = await fetch(`${API_SERVICE}/get_all_tasks/${user?.id}`, {
+            const response = await fetch(tasksAllUrl, {
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -62,10 +69,28 @@ const Reports = () => {
         } catch (err) {
             console.log(err);
         }
-    };
+      }
+    
 
-    useEffect(() => {
-        fetchTasks();
+    useEffect(async () => {
+      const userId = sessionStorage.getItem("userId");
+      try {
+        const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (response.status === 200) {
+          const userData = await response.json();
+          var userType=userData.userType
+        }
+      } catch (error) {
+        console.log(error);
+      }  
+        fetchTasks(userType);
     }, []);
 
   return (

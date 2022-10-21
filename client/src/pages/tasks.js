@@ -55,9 +55,15 @@ const Customers = () => {
     }
   };
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (userType) => {
+      if(userType=="admin"){
+        var allTasks =`${API_SERVICE}/get_all_tasks`
+      }
+      else{
+        var allTasks = `${API_SERVICE}/get_all_tasks/${user?.id}`
+      }
     try {
-      const response = await fetch(`${API_SERVICE}/get_all_tasks/${user?.id}`, {
+      const response = await fetch(allTasks, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -82,8 +88,27 @@ const Customers = () => {
 
   }, []);
 
-  useEffect(() => {
-    fetchTasks();
+  useEffect(async ()=> {
+    const userId = sessionStorage.getItem("userId");
+    try {
+      const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        var userType=userData.userType
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+      
+    fetchTasks(userType);
   }, [toggler]);
   return (
     <>

@@ -70,9 +70,37 @@ const ReportTable = ({ customers }) => {
     // const autoComp = [];
 console.log(selectedCustomers)
     const fetchTasks = async (name = '') => {
+
+
+        const userId = sessionStorage.getItem("userId");
+    try {
+      const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        var userType=userData.userType
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+      try {
+        if(userType=="admin"){
+          var allTasks =`${API_SERVICE}/get_all_tasks`
+        }
+        else{
+          var allTasks = `${API_SERVICE}/get_all_tasks/${user?.id}?name=${name}`
+        }
+        
         // console.log(searchVal, name)
         try {
-            const response = await fetch(`${API_SERVICE}/get_all_tasks/${user?.id}?name=${name}`, {
+            const response = await fetch(allTasks, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -102,6 +130,9 @@ console.log(selectedCustomers)
         } catch (err) {
             console.log(err);
         }
+    } catch (err) {
+        console.log(err);
+      }
     };
 
     const onMonthChange = (changedMonth) => {

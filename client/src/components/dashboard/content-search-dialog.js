@@ -265,7 +265,7 @@ export const ContentSearchDialog = (props) => {
                 {emails.map((name) => (
                   <MenuItem key={name} value={name}>
                     <Checkbox checked={personName.indexOf(name) > -1} />
-                    <ListItemText primary={name} />
+                    <ListItemText primary={name?.slice(0, name?.indexOf('@'))} />
                   </MenuItem>
                 ))}
               </Select>

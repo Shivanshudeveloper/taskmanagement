@@ -55,10 +55,16 @@ const Teams = () => {
     }
   };
 
-  const fetchTeams = async () => {
+  const fetchTeams = async (userType) => {
     debugger;
+    if(userType=="admin"){
+      var allTeams =`${API_SERVICE}/get_all_teams`
+    }
+    else{
+      var allTeams = `${API_SERVICE}/get_all_teams/${user?.id}`
+    }
     try {
-      const response = await fetch(`${API_SERVICE}/get_all_teams/${user?.id}`, {
+      const response = await fetch(allTeams, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -82,8 +88,27 @@ const Teams = () => {
 
   }, []);
 
-  useEffect(() => {
-    fetchTeams();
+  useEffect(async() => {
+    const userId = sessionStorage.getItem("userId");
+    try {
+      const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        var userType=userData.userType
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+     
+    fetchTeams(userType);
   }, [toggler]);
   return (
     <>

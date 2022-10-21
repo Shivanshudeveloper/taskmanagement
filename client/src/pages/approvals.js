@@ -16,8 +16,31 @@ const Customers = () => {
   const {user} = useAuth();
   
   useEffect(async () => {
+    const userId = sessionStorage.getItem("userId");
+    try {
+      const response = await fetch(`${API_SERVICE}/get_user/${userId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        var userType=userData.userType
+      }
+    } catch (error) {
+      console.log(error);
+    }
       try {
-        const response = await fetch(`${API_SERVICE}/get_all_tasks_complete/${user?.id}`, {
+        if(userType=="admin"){
+          var allTasks =`${API_SERVICE}/get_all_tasks`
+        }
+        else{
+          var allTasks = `${API_SERVICE}/get_all_tasks_complete/${user?.id}`
+        }
+        const response = await fetch(allTasks, {
           method: "GET",
           headers: {
             Accept: "application/json",
