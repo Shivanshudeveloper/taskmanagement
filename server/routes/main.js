@@ -18,6 +18,8 @@ router.get("/test", (req, res) => {
 router.post("/add_task", taskController.createTask);
 //Get all Tasks
 router.get("/get_all_tasks/:userId", taskController.getAllTasks);
+//Get all Tasks
+router.get("/get_all_tasks", taskController.getAllTasksForAdmin);
 // Delete a task
 router.delete("/delete_task/:taskId/:userId", taskController.deleteTask);
 // Get a single task
@@ -28,6 +30,8 @@ router.put("/edit_task/:taskId/:userId", taskController.editTask);
 router.get("/get_all_tasks_mail/:assignedTo", taskController.getAllTasksUsingEmail)
 //get task assigned to a user
 router.get("/get_all_tasks_complete/:userId", taskController.getAllCompleteTasks)
+
+router.get("/get_all_tasks_complete", taskController.getAllCompleteTasksForAdmin)
 
 // User Data
 // Add user data
@@ -42,5 +46,9 @@ router.post("/add_team", teamController.createTeam);
 
 //Get all Tasks
 router.get("/get_all_teams/:userId", teamController.getAllTeams);
+
+//Get all Tasks
+router.get("/get_all_teams", teamController.getAllTasksForAdmin);
+
 
 module.exports = router;

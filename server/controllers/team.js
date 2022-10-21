@@ -28,6 +28,14 @@ const getAllTeams = async (req, res) => {
       .catch((error) => res.status(400).json(error));
 };
 
+const getAllTasksForAdmin = async (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+    Team.find()
+      .then((p) => res.status(200).json(p))
+      .catch((error) => res.status(400).json(error));
+};
+
+
 const getAllTasksUsingEmail = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   // console.log(req.params.assignedTo)
@@ -99,5 +107,6 @@ module.exports = {
   getSpecificTask,
   editTask,
   getAllTasksUsingEmail,
-  getAllCompleteTasks
+  getAllCompleteTasks,
+  getAllTasksForAdmin
 };

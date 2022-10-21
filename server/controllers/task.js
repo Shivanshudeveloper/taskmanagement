@@ -62,6 +62,19 @@ const getAllTasks = async (req, res) => {
   }
 };
 
+
+const getAllTasksForAdmin = async (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  try{
+   const data = await Task.find();
+   res.json(data);
+    
+  }
+  catch(error){
+    res.json(error);
+  }
+};
+
 const getAllTasksUsingEmail = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   // console.log(req.params.assignedTo)
@@ -76,6 +89,18 @@ const getAllCompleteTasks = async (req, res) => {
   Task.find({ userId: req.params.userId, status: 1 })
     .then((p) => res.status(200).json(p))
     .catch((error) => res.status(400).json(error));
+};
+
+const getAllCompleteTasksForAdmin = async (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  try{
+    const data = await Task.find();
+    res.json(data);
+     
+   }
+   catch(error){
+     res.json(error);
+   }
 };
 
 const deleteTask = async (req, res) => {
@@ -129,7 +154,9 @@ const editTask = async (req, res) => {
 module.exports = {
   createTask,
   getAllTasks,
+  getAllTasksForAdmin,
   deleteTask,
+  getAllCompleteTasksForAdmin,
   getSpecificTask,
   editTask,
   getAllTasksUsingEmail,
