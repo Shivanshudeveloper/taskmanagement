@@ -28,7 +28,7 @@ const getAllTeams = async (req, res) => {
       .catch((error) => res.status(400).json(error));
 };
 
-const getAllTasksForAdmin = async (req, res) => {
+const getAllTeamsForAdmin = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
     Team.find()
       .then((p) => res.status(200).json(p))
@@ -108,5 +108,5 @@ module.exports = {
   editTask,
   getAllTasksUsingEmail,
   getAllCompleteTasks,
-  getAllTasksForAdmin
+  getAllTeamsForAdmin
 };

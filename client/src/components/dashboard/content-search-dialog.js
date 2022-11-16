@@ -46,10 +46,21 @@ export const ContentSearchDialog = (props) => {
   const { onClose, open, selectedTask, setToggler, ...other } = props;
   const { user } = useAuth();
   const [emails, setEmails] = useState([]);
+  const [mems, setMems] = useState([]);
   // const [marks, setMarks] = useState(null);
   // const [repeat, setRepeat] = useState(null);
 
   console.log(selectedTask);
+
+  const Members=(ele)=>{
+    let s=""  
+    ele.forEach((m)=>{
+      s = s + m
+      s = s + " , "  
+    })
+    s  = s.substring(0,s.length-2)
+    return s;
+    };
 
   const [state, setState] = useState({
     name: "",
@@ -81,6 +92,33 @@ export const ContentSearchDialog = (props) => {
         })
         // setEmails(...emails, userData);
         console.log(emails);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${API_SERVICE}/get_all_groups`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        // console.log(userData);
+        userData.forEach((data) => {
+          if (data?.members) {
+            setIsLoading(false);
+            setMems(mems => [...mems, data.members]);
+          }
+        })
+        console.log(mems);
       }
 
     } catch (error) {
@@ -135,7 +173,7 @@ export const ContentSearchDialog = (props) => {
   const createTask = async () => {
     debugger;
     console.log("hello 55")
-   
+
     smsSend();
     try {
       const response = await fetch(`${API_SERVICE}/add_task`, {
@@ -159,13 +197,13 @@ export const ContentSearchDialog = (props) => {
   const smsSend = async () => {
     debugger;
     try {
-      const user="SANSKARDSA";
-      const pass= "s123456";
-      const sender="SANSKR";
-      const phone=state.phonenumber;
-      const text="Test SMS";
-      const priority="Priority";
-      const stype="smstype";
+      const user = "SANSKARDSA";
+      const pass = "s123456";
+      const sender = "SANSKR";
+      const phone = state.phonenumber;
+      const text = "Test SMS";
+      const priority = "Priority";
+      const stype = "smstype";
       const response = await fetch(`http://bhashsms.com/api/sendmsg.php?user=${user}&pass=${pass}&sender=${sender}&phone=${phone}&text=${text}&priority=${priority}&stype=${stype}`, {
         method: "GET",
         headers: {
@@ -181,8 +219,14 @@ export const ContentSearchDialog = (props) => {
     } catch (err) {
       console.log(err);
     }
-   
+
   }
+  const handleSingleChange = (event) => { 
+    setMems(event.target.value);
+    //console.log(mems)
+
+  }
+  
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
@@ -240,7 +284,7 @@ export const ContentSearchDialog = (props) => {
               value={state.description}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} >
             {/* <TextField
               fullWidth
               InputLabelProps={{
@@ -271,7 +315,31 @@ export const ContentSearchDialog = (props) => {
               </Select>
             </FormControl>
           </Grid>
-
+          {/* <Grid item xs={12} md={6}>
+            {
+              isLoading?(<center>
+                <CircularProgress sx={{ mt: 15 }} />
+              </center>):(
+                <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Assign To a group</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={mems}
+                label="Age"
+                onChange={handleSingleChange}
+              >
+               {mems.map((name) => (
+                  <MenuItem key={name.id} value={name}>
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+              )
+            }
+            
+          </Grid> */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth

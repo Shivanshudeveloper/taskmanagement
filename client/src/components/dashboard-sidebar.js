@@ -39,6 +39,12 @@ const items = [
     access: "admin",
   },
   {
+    href:"/groups",
+    icon:<SelectorIcon fontSize="small" />,
+    title:"Groups",
+    access:"admin",
+  },
+  {
     href: "/teams",
     icon: <SelectorIcon fontSize="small" />,
     title: "Teams",

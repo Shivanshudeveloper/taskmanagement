@@ -7,7 +7,7 @@ const router = express.Router();
 const taskController = require("../controllers/task");
 const userController = require("../controllers/user");
 const teamController = require("../controllers/team");
-
+const groupController = require("../controllers/group");
 // Test route
 router.get("/test", (req, res) => {
   res.send("Working");
@@ -41,14 +41,28 @@ router.get("/get_user/:userId", userController.getUser);
 router.post("/edit_user/:userId", userController.editUser);
 // router.post("/edit_user2/:email", userController.editUser2);
 
-// Add a new task
+// Add a new team
 router.post("/add_team", teamController.createTeam);
 
-//Get all Tasks
+//Get all Teams
 router.get("/get_all_teams/:userId", teamController.getAllTeams);
 
-//Get all Tasks
-router.get("/get_all_teams", teamController.getAllTasksForAdmin);
+//Get all Teams of Admin
+router.get("/get_all_teams", teamController.getAllTeamsForAdmin);
 
+
+
+// Add a new group
+router.post("/add_group", groupController.createGroup);
+{
+  
+}
+//Get all Teams
+router.get("/get_all_groups/:userId", groupController.getAllGroups);
+
+//Get all Teams of Admin
+router.get("/get_all_groups", groupController.getAllGroupsForAdmin);
+
+router.delete("/delete_group/:groupId/:userId", groupController.deleteGroup);
 
 module.exports = router;
