@@ -50,8 +50,9 @@ export const ContentSearchDialog = (props) => {
   // const [marks, setMarks] = useState(null);
   // const [repeat, setRepeat] = useState(null);
 
-  console.log(selectedTask);
-
+  //console.log(selectedTask);
+  const teamMails=props.teams.map((t)=>{return t.email;});
+  console.log(teamMails);
   const Members=(ele)=>{
     let s=""  
     ele.forEach((m)=>{
@@ -91,7 +92,7 @@ export const ContentSearchDialog = (props) => {
           // console.log(data?.email)
         })
         // setEmails(...emails, userData);
-        console.log(emails);
+       // console.log(emails);
       }
 
     } catch (error) {
@@ -148,7 +149,11 @@ export const ContentSearchDialog = (props) => {
 
 
   const [personName, setPersonName] = useState([]);
-
+  const [membersName,setMembersName]=useState("")
+ const [results,setResults] = useState([]);
+ // const [assignNames , setAssignNames]=useState([]);
+ 
+ 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -172,8 +177,9 @@ export const ContentSearchDialog = (props) => {
 
   const createTask = async () => {
     debugger;
-    console.log("hello 55")
-
+    console.log("hello 55");
+    const assignnames=[...personName,...results];
+    console.log(personName,results);
     smsSend();
     try {
       const response = await fetch(`${API_SERVICE}/add_task`, {
@@ -182,12 +188,13 @@ export const ContentSearchDialog = (props) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...state, userId: user?.id, approved: 0, assignedTo: [...personName] }),
+        body: JSON.stringify({ ...state, userId: user?.id, approved: 0, assignedTo: [...assignnames] }),
       });
       if (response.status === 200) {
         onClose();
         alert("Task created");
         setToggler();
+        console.log(assignnames);
       }
     } catch (err) {
       console.log(err);
@@ -221,9 +228,22 @@ export const ContentSearchDialog = (props) => {
     }
 
   }
+  
+  
   const handleSingleChange = (event) => { 
-    setMems(event.target.value);
-    //console.log(mems)
+    setMembersName(event.target.value);
+    // console.log(event.target.value);
+    const GroupMemName=event.target.value;
+    const MyArrayLower = [];
+    GroupMemName.map((name)=>{
+      MyArrayLower.push(name.toLowerCase());
+    })
+    // console.log(MyArrayLower);
+    const emailsOfGroupMems=teamMails.filter((email)=>{
+      return MyArrayLower.includes(email.slice(0,email.indexOf('@')))
+    })
+    console.log(emailsOfGroupMems);
+    setResults(emailsOfGroupMems);
 
   }
   
@@ -315,7 +335,7 @@ export const ContentSearchDialog = (props) => {
               </Select>
             </FormControl>
           </Grid>
-          {/* <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             {
               isLoading?(<center>
                 <CircularProgress sx={{ mt: 15 }} />
@@ -325,13 +345,13 @@ export const ContentSearchDialog = (props) => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={mems}
+                value={membersName}
                 label="Age"
                 onChange={handleSingleChange}
               >
                {mems.map((name) => (
                   <MenuItem key={name.id} value={name}>
-                    <ListItemText primary={name} />
+                    <ListItemText primary={Members(name)} />
                   </MenuItem>
                 ))}
               </Select>
@@ -339,7 +359,7 @@ export const ContentSearchDialog = (props) => {
               )
             }
             
-          </Grid> */}
+          </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth

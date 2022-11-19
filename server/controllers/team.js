@@ -35,6 +35,18 @@ const getAllTeamsForAdmin = async (req, res) => {
       .catch((error) => res.status(400).json(error));
 };
 
+const deleteTeam = async (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+
+  Team.deleteOne(
+    { _id: req.params.teamId, userId: req.params.userId },
+    (err) => {
+      if (err) res.status(400).json(`Error: ${err}`);
+      else res.status(200).json("Deleted one Team successfully!");
+    }
+  );
+};
+
 
 const getAllTasksUsingEmail = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
@@ -52,17 +64,7 @@ const getAllCompleteTasks = async (req, res) => {
     .catch((error) => res.status(400).json(error));
 };
 
-const deleteTask = async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
 
-  Task.deleteOne(
-    { _id: req.params.taskId, userId: req.params.userId },
-    (err) => {
-      if (err) res.status(400).json(`Error: ${err}`);
-      else res.status(200).json("Deleted one task successfully!");
-    }
-  );
-};
 
 const getSpecificTask = async (req, res) => {
   console.log(req.params.taskId);
@@ -103,7 +105,7 @@ const editTask = async (req, res) => {
 module.exports = {
   createTeam,
   getAllTeams,
-  deleteTask,
+  deleteTeam,
   getSpecificTask,
   editTask,
   getAllTasksUsingEmail,

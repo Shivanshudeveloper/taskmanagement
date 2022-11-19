@@ -39,9 +39,9 @@ export const TeamsListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
-  const deleteTask = async (id) => {
+  const deleteTeam = async (id) => {
     try {
-      const response = await fetch(`${API_SERVICE}/delete_task/${id}/${user?.id}`, {
+      const response = await fetch(`${API_SERVICE}/delete_team/${id}/${user?.id}`, {
         method: "DELETE",
         headers: {
           Accept: "application/json",
@@ -49,7 +49,7 @@ export const TeamsListResults = ({ customers, ...rest }) => {
         },
       });
       if (response.status === 200) {
-        alert("Task deleted");
+        alert("Team deleted");
         setToggler();
       }
     } catch (err) {
@@ -102,7 +102,7 @@ export const TeamsListResults = ({ customers, ...rest }) => {
                         <IconButton
                           onClick={() => {
                             console.log("Hello");
-                            deleteTask(customer._id);
+                            deleteTeam(customer._id);
                           }}
                           color="primary"
                           aria-label="upload picture"

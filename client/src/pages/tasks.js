@@ -15,6 +15,7 @@ import { useAuth } from "src/hooks/use-auth";
 const Customers = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [teams,setTeams]=useState([])
   const { user } = useAuth();
   const [toggler, setToggler] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -79,6 +80,31 @@ const Customers = () => {
       console.log(err);
     }
   };
+  const fetchTeams = async (userType) => {
+    debugger;
+    if(userType=="admin"){
+      var allTeams =`${API_SERVICE}/get_all_teams`
+    }
+    else{
+      var allTeams = `${API_SERVICE}/get_all_teams/${user?.id}`
+    }
+    try {
+      const response = await fetch(allTeams, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        const data = await response.json();
+        setTeams(data);
+        console.log(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const { t } = queryString.parse(window.location.search);
@@ -107,7 +133,7 @@ const Customers = () => {
       console.log(error);
     }
 
-      
+    fetchTeams(userType);
     fetchTasks(userType);
   }, [toggler]);
   return (
@@ -126,6 +152,7 @@ const Customers = () => {
           <TaskListToolbar
             selectedTask={selectedTask}
             openDialog={openDialog}
+            teams={teams}
             handleCloseSearchDialog={handleCloseSearchDialog}
             handleOpenSearchDialog={handleOpenSearchDialog}
             setToggler={() => setToggler(!toggler)}

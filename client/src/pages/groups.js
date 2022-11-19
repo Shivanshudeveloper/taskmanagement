@@ -101,7 +101,7 @@ const fetchTeams = async (userType) => {
       if (response.status === 200) {
         const data = await response.json();
         setTeams(data);
-        //console.log(data);
+        console.log(data);
       }
     } catch (err) {
       console.log(err);

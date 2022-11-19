@@ -50,6 +50,7 @@ router.get("/get_all_teams/:userId", teamController.getAllTeams);
 //Get all Teams of Admin
 router.get("/get_all_teams", teamController.getAllTeamsForAdmin);
 
+router.delete("/delete_team/:teamId/:userId", teamController.deleteTeam);
 
 
 // Add a new group
