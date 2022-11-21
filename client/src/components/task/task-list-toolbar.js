@@ -568,7 +568,7 @@ export const TaskListToolbar = (props) => {
           <Grid item sm={12}>
 
             <Box textAlign="right">
-              <Button
+              {/* <Button
                 margin={2}
                 variant="contained"
                 color="error"
@@ -576,7 +576,7 @@ export const TaskListToolbar = (props) => {
                 onClick={handleCloseSearchDialog}
               >
                 Cancel
-              </Button>
+              </Button> */}
               <Button
                 margin={2}
                 variant="contained"
